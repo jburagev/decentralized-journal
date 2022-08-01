@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "vast-gearing-355922",
+  "private_key_id": "de3f2fe2e800a03030524c82a2e4a8c343f23e4e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCSpesmViOLi55Z\ndsA5wV9i3UPPWC0PmQmbiV7dSN+XDfpWiFAPJ1gUAKhtcodKcaubbQYEzVuk7B/0\nQ44bCu30EXY8UMMSGzoEg9FDhRsT/CW7lNRnnrO4XHl3EX0xUMVRaHEkh7InL2g2\n4upuX72Nq61DHY3F4DOom0u74qF3MllGVnUQGA8ARdWIKWM9S66e442X89AJXZFu\nXaT+8U0MH/IyxRkcJ8O3TfFjoRpOCLBT8wGrgoq2/ueujItGDuQXQSGwF5gGsNIS\nHbRvhV5hXoz6yusgGgTddzZ7Akp2pnyAItprkzK8Kwvvc87/lSyqliQzUzk0xZxl\n5R8VDIVbAgMBAAECggEAAmuypJPcHwoSO0asCvHd3XySE1PajpCz340Mhy0eHoA/\nX+ckNLZK0VUYEC/6rEXMTro5QSwJ3OLz2wC0Kidrm+UflnrBa7r6UwBezatoYyJp\nWrtxxV5qPNFWk8vt1utKDooSxjM/r8jnDHMLdCfP4xbmzrHZJ9WbaGKD3bboyrix\nhRkEH0DiWPCGOLotKXnS45TuFo6Girxj2MY/QenUR9WwcNgOvoZid+Tv03lYNoLx\n8eqfdR9NhtLUqmkEMGILLX4/yOKjx8t6qga7XQghUNXR1x5pIl2GoqETNb6sWbmA\nKBMJdaTS+4DeG58vj/8ITiylJQx99yIIfFuYAw+JcQKBgQDNUIO3fjD/FYVaiM1a\nj1ku6PpX/hL6BapQHknf7W5F8RcxAUNq2yyTtT5n3KDRFT93YknD84wa7lbQc1N0\n5xYVFQUtKrSpZTYgJNP5adJImtQGp6m3Y1+LSl1S7aKuQ0gp++hPtc6jvGxVAabQ\nP0OiY7qUjAcejzVDynmNOTqeEQKBgQC22czPEnqjd8r9tZs08y1dCak2YLrZl9zW\nv8I2TwJEcqTdBvmsVQK0/3rm4EGb+udG65xWarg81vYs+1BteopGGmzfw9KrW7oi\nM+CK3f2sEabTUgYL/TGBUdtV3XoOE5D92qguNFAL99ELzbiVCfSBWpME1f4OAu/w\nbdIX6mXwqwKBgQCdxJjyj42m9iqa/zSNukmVuoFkzGBYr7HIDv5FjHWIWVKw3X+o\nxPLkLgneVbNd9y3l1ylH4gZvS2Z6l6Qx2MEnQhfQNVjOMm/9E0+wAJkOIat70aqg\nuUPaDTLZXrH7psf1OxWw6sv3FftI9xPwQiz+xBPDwjZWTUVo6lWtJ6TbgQKBgQCL\nDMoxVo4orbqSgX6MH7mJnQUvMxQk0NXCAYWBo0fIIZ657soDgYpTdk1SMYvzQDSM\nvDPhi7qbmaUPw/X/q0Zn1USiTdpxMYo05FqHgBWeurWw0hmDGIKDI2q2u3xMJBkI\n0zU+Hc4Zq9UvMryBqlZj4CsZbFqM8TLiFcHFKh1njQKBgDtuwxNAyP/y6+LwJGGT\nMneIiZMU72DggrIonkpGUcRj7exb58Wq8eaSAn155RoLq6t/d6GIlxIW07iJZq3y\n4RIY2JBPE0lwyXWa6B44shp0vXYvLyxG3r7ih9wW1mLVOnLwkozVM1mm1b4w6Ptr\n9zIddTwWCkspkXxN447CKY1S\n-----END PRIVATE KEY-----\n",
+  "client_email": "dao-publishing-org@vast-gearing-355922.iam.gserviceaccount.com",
+  "client_id": "105385349493004134231",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dao-publishing-org%40vast-gearing-355922.iam.gserviceaccount.com"
+}
