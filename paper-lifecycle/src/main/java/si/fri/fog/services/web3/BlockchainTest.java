@@ -13,9 +13,9 @@ import org.web3j.utils.Convert;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-public class BlockchainEventListener {
+public class BlockchainTest {
 
-    public void checkEvents() throws IOException {
+    public void callFunction() throws IOException {
         Web3j web3 = Web3j.build(new HttpService("http://127.0.0.1:7545"));
         try {
             Web3ClientVersion clientVersion = web3.web3ClientVersion().send();
