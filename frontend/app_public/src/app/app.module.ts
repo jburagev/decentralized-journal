@@ -12,6 +12,7 @@ import { HomeComponent } from './home/home.component';
 import { NftsComponent } from './nfts/nfts.component';
 import { ArticlesComponent } from './articles/articles.component';
 import { ArticlesEditorComponent } from './articles-editor/articles-editor.component';
+import { TestComponentComponent } from './test-component/test-component.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ArticlesEditorComponent } from './articles-editor/articles-editor.compo
     HomeComponent,
     NftsComponent,
     ArticlesComponent,
-    ArticlesEditorComponent
+    ArticlesEditorComponent,
+    TestComponentComponent
   ],
   imports: [
     BrowserModule,

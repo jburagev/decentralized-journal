@@ -1,0 +1,3 @@
+# decentralized-journal
+
+Smart contracts
