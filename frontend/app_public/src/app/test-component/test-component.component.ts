@@ -33,11 +33,11 @@ export class TestComponentComponent implements OnInit {
       
       const signer = provider.getSigner(); 
 
-      const smartcont : any = new ethers.Contract("0xCEBaC8bAbB16cD1BE0F5DD71033C3B43888F059c",testAbi,signer);
+      //const smartcont : any = new ethers.Contract("0xCEBaC8bAbB16cD1BE0F5DD71033C3B43888F059c",testAbi,signer);
 
-      const test = await smartcont.submittedArticles("jovs123");
+      //const test = await smartcont.submittedArticles("jovs123");
 
-      console.log(test);
+      //console.log(test);
 
 
 

@@ -16,6 +16,7 @@
 </nav>
 <div class="tab-content mt-5" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-all-articles" role="tabpanel" aria-labelledby="nav-all-articles-tab">
+        <!--
         <div class="card ml-5 mr-5 mt-3 bg-success thumbnail">
             <a>
                 <div class="card-header">
@@ -53,24 +54,24 @@
                     content. This content is a little bit longer.</p>
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
             </div>
-        </div>
-        <div class="card ml-5 mr-5 mt-3 thumbnail bg-warning">
+        </div> -->
+        <div *ngFor="let article of articles" class="card ml-5 mr-5 mt-3 thumbnail bg-warning">
             <a>
                 <div class="card-header">
                     <div class="float-left">
-                        <h4>Article title</h4>
+                        <h4>{{article.title}}</h4>
                     </div>
                     <div class="float-right">
-                        <p class="text-right">Article under review</p>
+                        <p class="text-right">{{article.stage}}</p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
             </a>
             <div class="card-body bg-light">
-                <h5 class="card-title">Card title</h5>
+                <h5 class="card-title">User {{article.user}}</h5>
                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
                     content. This content is a little bit longer.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <p class="card-text"><small class="text-muted">Submitted {{article.submittedDate}}</small></p>
             </div>
         </div>
     </div>
