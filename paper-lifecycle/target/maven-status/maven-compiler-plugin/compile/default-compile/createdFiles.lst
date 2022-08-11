@@ -7,6 +7,7 @@ si\fri\fog\rest\MetadataFacade.class
 si\fri\fog\services\FileService.class
 si\fri\fog\services\storage\gcp\FirestoreService.class
 si\fri\fog\pojo\dtos\MetadataDTO$MetadataDTOBuilder.class
+si\fri\fog\rest\TestFacadeBlockhain.class
 si\fri\fog\services\authorization\AuthenticationService.class
 si\fri\fog\services\MetadataService.class
 si\fri\fog\pojo\Review.class
@@ -21,6 +22,7 @@ si\fri\fog\services\authorization\UserService.class
 si\fri\fog\services\messaging\MailService.class
 si\fri\fog\pojo\Review$ReviewBuilder.class
 si\fri\fog\services\storage\StorageService.class
+si\fri\fog\services\web3\BlockchainTest.class
 si\fri\fog\pojo\integrations\IpfsResponse.class
 si\fri\fog\services\storage\ipfs\client\IpfsClient.class
 si\fri\fog\pojo\User.class

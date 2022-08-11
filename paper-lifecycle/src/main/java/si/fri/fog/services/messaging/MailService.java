@@ -17,7 +17,7 @@ import java.io.IOException;
 public class MailService {
 
     private static final String API_KEY = System.getenv("sendgrid");
-    private static final String SENDER_MAIL = "fog-computing-2022@proton.me";
+    private static final String SENDER_MAIL = "jb5000@student.uni-lj.si";
     private final SendGrid sendGrid = new SendGrid(API_KEY);
 
     public void sendEmail(String receiverEmail, String subject, String contentBody) {

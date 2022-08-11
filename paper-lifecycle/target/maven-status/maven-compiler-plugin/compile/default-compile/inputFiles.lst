@@ -1,4 +1,5 @@
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\FileFacade.java
+C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\TestFacadeBlockhain.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\pojo\User.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\storage\gcp\GoogleCloudStorageService.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\authorization\UserService.java
@@ -25,6 +26,7 @@ C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\AuthorFacade.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\pojo\integrations\IpfsResponse.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\pojo\Review.java
+C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\web3\BlockchainTest.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\messaging\MessageService.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\storage\gcp\FirestoreService.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\messaging\MailService.java
