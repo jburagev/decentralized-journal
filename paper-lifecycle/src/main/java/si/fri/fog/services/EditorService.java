@@ -51,6 +51,6 @@ public class EditorService {
                 .stage(finalDecision.toString())
                 .build();
         metadataService.updateMetadata(metadataDTO);
-        messageService.notifyAuthor(metadata.getTitle(), metadataService.getUser(metadata.getTitle()), finalDecision);
+        messageService.notifyAuthor(metadata.getTitle(), metadataService.getUser(metadata.getId()), finalDecision);
     }
 }
