@@ -9,7 +9,7 @@ import si.fri.fog.pojo.integrations.IpfsResponse;
 import javax.ws.rs.*;
 import java.io.File;
 
-@RegisterRestClient(baseUri = "http://localhost:8081/v1/file")
+@RegisterRestClient(baseUri = "http://localhost:8080/v1/file")
 public interface IpfsClient {
 
     @GET
