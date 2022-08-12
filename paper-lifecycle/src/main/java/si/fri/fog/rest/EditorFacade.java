@@ -54,4 +54,5 @@ public class EditorFacade {
         editorService.saveFinalDecision(id, decision);
         return Response.ok().build();
     }
+
 }

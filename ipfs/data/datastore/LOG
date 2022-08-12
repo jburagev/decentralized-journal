@@ -78,3 +78,13 @@
 19:43:45.809907 table@remove removed @12
 19:43:45.812896 table@remove removed @5
 19:43:45.816230 table@remove removed @2
+=============== Aug 12, 2022 (UTC) ===============
+09:13:01.712823 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+09:13:01.729923 version@stat F·[0 1] S·4KiB[0B 4KiB] Sc·[0.00 0.00]
+09:13:01.731117 db@open opening
+09:13:01.733678 journal@recovery F·1
+09:13:01.734520 journal@recovery recovering @16
+09:13:01.756102 memdb@flush created L0@19 N·9 S·2KiB "/F5..KYQ,v73":"/pr..KWE,v68"
+09:13:01.762060 version@stat F·[1 1] S·7KiB[2KiB 4KiB] Sc·[0.25 0.00]
+09:13:01.805986 db@janitor F·4 G·0
+09:13:01.806516 db@open done T·74.9293ms
