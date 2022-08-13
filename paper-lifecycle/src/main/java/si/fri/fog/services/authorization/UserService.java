@@ -18,7 +18,8 @@ public class UserService {
                 new User("magerl.zan@gmail.com", Role.AUTHOR),
                 new User("buragev@student.uni-lj.si", Role.EDITOR),
                 new User("buragev1@gmail.com", Role.REVIEWER),
-                new User("jb5000@student.uni-lj.si", Role.AUTHOR)
+                new User("jb5000@student.uni-lj.si", Role.AUTHOR),
+                new User("0x6b1ab1fd76d471f7b65cdbe4198b72c2997476f8", Role.AUTHOR)
                 
         );
     }

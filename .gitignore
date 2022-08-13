@@ -2,4 +2,8 @@ paper-lifecycle/vast-gearing-355922-de3f2fe2e800.json
 ipfs\model
 ipfs\data
 
+IDENTITY\API server\config.js
+
+IDENTITY/API server/node_modules/
+
 .env
