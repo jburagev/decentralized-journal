@@ -22,4 +22,5 @@ public class AuthenticationService {
     public User getUser(String token){
         return identityManagement.getUser(token);
     }
+
 }

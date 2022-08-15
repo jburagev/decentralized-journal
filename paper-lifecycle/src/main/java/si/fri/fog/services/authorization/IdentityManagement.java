@@ -3,12 +3,17 @@ package si.fri.fog.services.authorization;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import si.fri.fog.pojo.User;
 
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
+import javax.ws.rs.*;
+
+import org.json.simple.JSONObject;
+
 @ApplicationScoped
-@RegisterRestClient(baseUri = "to-do")
+@RegisterRestClient(baseUri = "http://localhost:8083/")
 public interface IdentityManagement {
 
     @Path("/{token}")

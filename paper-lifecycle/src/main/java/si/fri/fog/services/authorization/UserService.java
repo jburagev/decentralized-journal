@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import javax.inject.Inject;
+
+
 @ApplicationScoped
 public class UserService {
 
@@ -45,4 +48,5 @@ public class UserService {
     public User getUser(String email){
         return getUsers().stream().filter(u -> u.getEmail().equals(email)).findFirst().get();
     }
+
 }

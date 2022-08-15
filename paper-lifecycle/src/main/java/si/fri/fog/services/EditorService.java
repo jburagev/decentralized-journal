@@ -53,4 +53,6 @@ public class EditorService {
         metadataService.updateMetadata(metadataDTO);
         messageService.notifyAuthor(metadata.getTitle(), metadataService.getUser(metadata.getId()), finalDecision);
     }
+
+
 }
