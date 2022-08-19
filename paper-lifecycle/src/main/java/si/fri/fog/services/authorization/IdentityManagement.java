@@ -2,6 +2,7 @@ package si.fri.fog.services.authorization;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import si.fri.fog.pojo.User;
+import si.fri.fog.pojo.integrations.IMUser;
 
 
 import javax.enterprise.context.ApplicationScoped;
@@ -12,6 +13,8 @@ import javax.ws.rs.*;
 
 import org.json.simple.JSONObject;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @ApplicationScoped
 @RegisterRestClient(baseUri = "http://localhost:8083/")
 public interface IdentityManagement {
@@ -21,5 +24,9 @@ public interface IdentityManagement {
 
     @Path("/editor")
     User getEditors();
+
+    @POST
+    @Path("/create")
+    String createUser(IMUser properties);
 
 }

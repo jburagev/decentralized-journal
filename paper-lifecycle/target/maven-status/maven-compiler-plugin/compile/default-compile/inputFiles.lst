@@ -7,7 +7,6 @@ C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\pojo\Metadata.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\EditorService.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\SubmissionService.java
-C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\UserManagmentFacade.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\ReviewerService.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\storage\ipfs\client\IpfsClient.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\MetadataFacade.java
@@ -15,13 +14,13 @@ C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\FileService.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\authorization\IdentityManagement.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\web3\BlockchainEventListener.java
+C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\pojo\integrations\IMUser.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\authorization\AuthenticationService.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\EditorFacade.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\TestFacade.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\pojo\dtos\ReviewDTO.java
-C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\authorization\UserServiceIm.java
-C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\authorization\AuthenticationServiceIm.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\MetadataService.java
+C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\IdentityFacade.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\pojo\Stage.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\services\storage\StorageService.java
 C:\UserData\Projects\DecentrilizedJournal\decentralized-journal\paper-lifecycle\src\main\java\si\fri\fog\rest\ReviewerFacade.java
