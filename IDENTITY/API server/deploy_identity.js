@@ -26,6 +26,7 @@ export async function create(provider_name, wallet_pk, verifier = authority_addr
     const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
     //const provider = ethers.providers.getDefaultProvider('rinkeby');
     var new_account = await web3.eth.accounts.create();
+    console.log(new_account);
     console.log(wallet_pk);
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);
@@ -43,7 +44,11 @@ export async function create(provider_name, wallet_pk, verifier = authority_addr
     await user.setHash(cyrb53(String(new_account.privateKey)));
     await user.setAuthority(verifier);
     console.log("User contract deployed at: " + user.address);
+    console.log("User address: " + new_account.address);
     fs.appendFileSync('created_accounts.txt', `${new Date().getTime()}: {contract: ${user.address}, account_password: ${new_account.privateKey}} \n`);
+
+    update_authority_SmartContract(user.address,"95a61e540fc42d7db8631b11451659a42098311309166ce5ad4aa0e5f11ab7b4",CONFIG.default_provider,new_account.address);
+
     return {"user_password": new_account.privateKey, "contract_address": user.address};
 };
 
@@ -92,6 +97,31 @@ export async function update_authority_values(contract, wallet_pk, provider_name
     }
     return true;
 }
+
+export async function update_authority_SmartContract(contract, wallet_pk, provider_name, userAddr) {
+    const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+    const wallet = new ethers.Wallet(wallet_pk, provider);
+    const account = wallet.connect(provider);
+    let rawdata = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
+    let contractJson = JSON.parse(rawdata.toString()); 
+
+    console.log(contractJson);
+
+    var authContract = new ethers.Contract(CONFIG.authority_SmartContract, contractJson.abi, account);
+    
+    try {
+       
+            console.log("updating user auth smart contract with user address and SM");
+            await authContract.setUserSmartContractAddr(userAddr,contract);
+     
+       
+    } catch (e) {
+        console.log(e.message)
+        return false;
+    }
+    return true;
+}
+
 
 export async function update_owner_values(contract, wallet_pk, provider_name, new_data) {
     const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);

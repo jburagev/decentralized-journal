@@ -8,3 +8,6 @@ delete_user(contract: string address): will set user address and hash to 0 value
 Verification - verify_identity.js
 verify_user(contract: string address, private_key: string): check if hash stored in contract and that of the passed private key match
 check_has_token_type(wallet: : string address, token_contract: string address): check if the specified wallet has a positive balance of the coin/token/NFT that was created by the token contract
+
+
+User Authority Smart contract address: 0x03A2e08FA4BA152c47C00710C4aa5DB1BE511c17
