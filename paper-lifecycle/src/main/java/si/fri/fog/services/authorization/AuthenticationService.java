@@ -13,7 +13,7 @@ public class AuthenticationService {
     @Inject
     @RestClient
     public IdentityManagement identityManagement;
-
+/* 
     public boolean hasPermissions(String token, Role role){
         User user = identityManagement.getUser(token);
         return user != null && user.getRole() == role;
@@ -22,5 +22,5 @@ public class AuthenticationService {
     public User getUser(String token){
         return identityManagement.getUser(token);
     }
-
+*/
 }

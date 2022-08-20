@@ -19,8 +19,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @RegisterRestClient(baseUri = "http://localhost:8083/")
 public interface IdentityManagement {
 
-    @Path("/{token}")
-    User getUser(@PathParam("token") String token);
+    @GET
+    @Path("read/{provider}/{address}")
+    String getUser(@PathParam("provider") String provider,@PathParam("address") String address);
 
     @Path("/editor")
     User getEditors();

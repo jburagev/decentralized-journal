@@ -51,4 +51,27 @@ public class IdentityFacade {
 
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("getUserMetadata/{provider}/{address}")
+    @Operation(summary = "Get user metadata", description = "Get user metadata for given contract adress")
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved user"
+            ),
+            @APIResponse(
+                    responseCode = "400",
+                    description = "Something went wrong with retrieving user data"
+            )
+    })
+    public Response getUserData(@PathParam("provider") String provider,@PathParam("address") String address){
+
+        String userData = identityManagement.getUser(provider, address);
+        
+        log.info("{}", userData);
+
+        return Response.ok().entity(userData).build();
+    }
+
 }
