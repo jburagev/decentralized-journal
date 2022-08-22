@@ -1,11 +1,12 @@
 package si.fri.fog.services.authorization;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 import si.fri.fog.pojo.User;
 import si.fri.fog.pojo.integrations.IMUser;
 
-
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @ApplicationScoped
 @RegisterRestClient(baseUri = "http://localhost:8083/")
 public interface IdentityManagement {
+
 
     @GET
     @Path("read/{provider}/{address}")

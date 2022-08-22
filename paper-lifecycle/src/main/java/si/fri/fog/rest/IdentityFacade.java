@@ -1,5 +1,6 @@
 package si.fri.fog.rest;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
@@ -25,9 +26,18 @@ public class IdentityFacade {
     @RestClient
     IdentityManagement identityManagement;
 
+    @Inject
+    @ConfigProperty(name = "authority.WalletPk") 
+    String walletPk;
+
+    @Inject
+    @ConfigProperty(name = "authority.provider") 
+    String provider;
+    
+
     @POST
     @Path("/create")
-    @Consumes(MediaType.APPLICATION_JSON)
+    //@Consumes(MediaType.APPLICATION_JSON)
     @Operation(summary = "Create new user", description = "Create new user in identity managment")
     @APIResponses({
             @APIResponse(
@@ -39,9 +49,15 @@ public class IdentityFacade {
                     description = "Something went wrong with creating the user"
             )
     })
-    public Response createUser(IMUser properties){
+    public Response createUser(){
+    //public Response createUser(IMUser properties){  --- Old way with json parameter
+        
+        IMUser properties = new IMUser();
 
-        log.info("{}", properties.walletPk);
+        properties.provider = this.provider;
+        properties.walletPk = this.walletPk;
+
+        log.info("{}", properties.provider);
 
         String response = identityManagement.createUser(properties);
         log.info("{}", response);
