@@ -47,7 +47,7 @@ export async function create(provider_name, wallet_pk, verifier = authority_addr
     console.log("User address: " + new_account.address);
     fs.appendFileSync('created_accounts.txt', `${new Date().getTime()}: {contract: ${user.address}, account_password: ${new_account.privateKey}} \n`);
 
-    update_authority_SmartContract(user.address,"95a61e540fc42d7db8631b11451659a42098311309166ce5ad4aa0e5f11ab7b4",CONFIG.default_provider,new_account.address);
+    update_authority_SmartContract_onCreate(user.address,"95a61e540fc42d7db8631b11451659a42098311309166ce5ad4aa0e5f11ab7b4",CONFIG.default_provider,new_account.address);
 
     return {"user_password": new_account.privateKey, "contract_address": user.address};
 };
@@ -98,7 +98,7 @@ export async function update_authority_values(contract, wallet_pk, provider_name
     return true;
 }
 
-export async function update_authority_SmartContract(contract, wallet_pk, provider_name, userAddr) {
+export async function update_authority_SmartContract_onCreate(contract, wallet_pk, provider_name, userAddr) {
     const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);

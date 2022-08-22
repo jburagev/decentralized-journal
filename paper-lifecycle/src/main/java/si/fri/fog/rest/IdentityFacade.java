@@ -65,9 +65,10 @@ public class IdentityFacade {
                     description = "Something went wrong with retrieving user data"
             )
     })
+
     public Response getUserData(@PathParam("provider") String provider,@PathParam("address") String address){
 
-        String userData = identityManagement.getUser(provider, address);
+        String userData = identityManagement.getUserMetadata(provider, address);
         
         log.info("{}", userData);
 

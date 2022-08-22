@@ -21,7 +21,7 @@ public interface IdentityManagement {
 
     @GET
     @Path("read/{provider}/{address}")
-    String getUser(@PathParam("provider") String provider,@PathParam("address") String address);
+    String getUserMetadata(@PathParam("provider") String provider,@PathParam("address") String address);
 
     @Path("/editor")
     User getEditors();
@@ -29,5 +29,6 @@ public interface IdentityManagement {
     @POST
     @Path("/create")
     String createUser(IMUser properties);
+
 
 }
