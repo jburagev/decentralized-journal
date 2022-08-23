@@ -7,7 +7,7 @@
                     <div class="mt-5 mr-5">
                         <h1 class="text-warning font-weight-bold" *ngIf="!foundAccountMetamask">Please connect your MetaMask account to continue using the app!</h1>
                         <h1 class="text-success font-weight-bold" *ngIf="foundAccountMetamask">Metamask account successfully connected! <br> The app is ready for usage</h1>
-                        <button (click)="createUserIM()" class="btn btn-primary">Create New User</button>
+                        <button (click)="createUser()" class="btn btn-primary">Create New User</button>
                         <br>
                         <span *ngIf="creatingUser">Creating new user...</span>
                         <div>{{ createdUserInfo }}</div>
