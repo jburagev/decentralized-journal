@@ -43,6 +43,7 @@ export async function create(provider_name, wallet_pk, verifier = authority_addr
 
     await user.setHash(cyrb53(String(new_account.privateKey)));
     await user.setAuthority(verifier);
+    
     console.log("User contract deployed at: " + user.address);
     console.log("User address: " + new_account.address);
     fs.appendFileSync('created_accounts.txt', `${new Date().getTime()}: {contract: ${user.address}, account_password: ${new_account.privateKey}} \n`);
@@ -52,36 +53,6 @@ export async function create(provider_name, wallet_pk, verifier = authority_addr
     return {"user_password": new_account.privateKey, "contract_address": user.address};
 };
 
-export async function create1(provider_name, wallet_pk, verifier = authority_address) {
-    //https://dev.to/yosi/deploy-a-smart-contract-with-ethersjs-28no
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    //const provider = ethers.providers.getDefaultProvider('rinkeby');
-    var new_account = await web3.eth.accounts.create();
-    console.log(new_account);
-    console.log(wallet_pk);
-    const wallet = new ethers.Wallet(wallet_pk, provider);
-    const account = wallet.connect(provider);
-
-    let rawdata = fs.readFileSync('./contract/JournalDID.json');
-    let contractJson = JSON.parse(rawdata.toString()); 
-    
-    const factory = new ethers.ContractFactory(contractJson.abi, contractJson.data.bytecode.object, account)
-    const price = ethers.utils.formatUnits(await provider.getGasPrice(), 'gwei')
-    const options = {gasLimit: 10000000, gasPrice: ethers.utils.parseUnits(price, 'gwei')}
-    
-    const user = await factory.deploy(options)
-    await user.deployed()
-
-    await user.setHash(cyrb53(String(new_account.privateKey)));
-    await user.setAuthority(verifier);
-    console.log("User contract deployed at: " + user.address);
-    console.log("User address: " + new_account.address);
-    fs.appendFileSync('created_accounts.txt', `${new Date().getTime()}: {contract: ${user.address}, account_password: ${new_account.privateKey}} \n`);
-
-    update_authority_SmartContract_onCreate(user.address,"95a61e540fc42d7db8631b11451659a42098311309166ce5ad4aa0e5f11ab7b4",CONFIG.default_provider,new_account.address);
-
-    return {"user_password": new_account.privateKey, "contract_address": user.address};
-};
 
 export async function read(contract, provider_name) {
     let rawdata = fs.readFileSync('./contract/JournalDID.json');
@@ -95,6 +66,34 @@ export async function read(contract, provider_name) {
     var user_data = await user.getUserData();
     user_data = JSON.parse(user_data);
     return {"owner": owner, "hash": hash, "type": Journal_usertype[type], "authority": authority, "user_data": user_data}
+}
+
+export async function authorizeUser(userAdress) {
+    let rawdataAuthority = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
+    let contractAuthorityJson = JSON.parse(rawdataAuthority.toString()); 
+
+    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+
+    var userDidAdress = await authorityContract.getUserSmartContractAddr(userAdress);
+
+    if(userDidAdress != "0x0000000000000000000000000000000000000000"){
+
+        let rawdataDid = fs.readFileSync('./contract/JournalDID.json');
+        let contractDIDJson = JSON.parse(rawdataDid.toString()); 
+
+        var user = new ethers.Contract(userDidAdress, contractDIDJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+
+        var userType = await user.getType();
+        console.log("User type" + userType);
+
+        return userType;
+
+    }else{
+        
+        return "User DID adress is not found";
+    }
+
+
 }
 
 export async function update_authority_values(contract, wallet_pk, provider_name, new_data) {

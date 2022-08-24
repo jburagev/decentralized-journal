@@ -65,7 +65,15 @@ contract UserAuthority {
 */
     function setUserSmartContractAddr(address userAddr,address userSmAddr) public onlyAuthority {
 
+        //need to add if condition in case is not authority to return error
         UsersSmartContractsAddrs[userAddr] = userSmAddr;
+       
+    }
+
+        function deleteUserContractAddr(address userAddr) public onlyAuthority {
+
+        //need to add if condition in case is not authority to return error
+        UsersSmartContractsAddrs[userAddr] = 0x0000000000000000000000000000000000000000;
        
     }
 

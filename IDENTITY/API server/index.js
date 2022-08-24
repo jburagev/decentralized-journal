@@ -4,7 +4,7 @@ import fs from 'fs';
 import bodyParser from "body-parser";
 
 import { cyrb53, verify_user } from "./verify_identity.js";
-import { create, read, update_authority_values, update_owner_values, delete_user, update_authority_SmartContract_onCreate } from "./deploy_identity.js";
+import { create, read, update_authority_values, update_owner_values, delete_user, update_authority_SmartContract_onCreate,authorizeUser } from "./deploy_identity.js";
 import CONFIG from './config.js';
 
 //https://buddy.works/guides/how-dockerize-node-application
@@ -51,22 +51,11 @@ app.post('/create', async function (req, res) {
     return 
 });
 
-app.post('/create1', async function (req, res) {
-    try { 
-        console.log("Creating identity");    
-        var data = await create(req.body.provider, req.body.wallet_pk);
-        res.status(200).json(data);
-    } catch(e) {
-        console.log('Error:', e.stack);
-        res.status(500).json(e.stack);
-    }
-    return 
-});
-
 app.get('/read/:provider/:id', async function (req, res) {
     try { 
         console.log("Reading identity", req.params.id, req.params.provider);    
         var data = await read(req.params.id, req.params.provider);
+        //console.log(data);
         res.status(200).json(data);
     } catch(e) {
         console.log('Error:', e.stack);
@@ -75,10 +64,22 @@ app.get('/read/:provider/:id', async function (req, res) {
     return 
 });
 
-app.post('/auth_update/:provider/:id', async function (req, res) {
+app.post('/auth_update1/:provider/:id', async function (req, res) {
     try { 
         console.log("Updating authority params");    
         var data = await update_authority_values(req.params.id, req.body.wallet_pk, req.params.provider, req.body.new_data);
+        res.status(200).json(data);
+    } catch(e) {
+        console.log('Error:', e.stack);
+        res.status(500).json(e.stack);
+    }
+    return 
+});
+
+app.post('/auth_update/:id', async function (req, res) {
+    try { 
+        console.log("Updating authority params");    
+        var data = await update_authority_values(req.params.id,CONFIG.wallet_pk, CONFIG.default_provider, req.body.new_data);
         res.status(200).json(data);
     } catch(e) {
         console.log('Error:', e.stack);
@@ -116,6 +117,18 @@ app.get('/verify/:provider/:id', async function (req, res) {
     try { 
         console.log("Verifying user");    
         var data = await verify_user(req.params.id, req.body.wallet_pk, req.params.provider, req.body.user_password);
+        res.status(200).json(data);
+    } catch(e) {
+        console.log('Error:', e.stack);
+        res.status(500).json(e.stack);
+    }
+    return 
+});
+
+app.get('/authorize/:id', async function (req, res) {
+    try { 
+        console.log("Authorizing user");    
+        var data = await authorizeUser(req.params.id);
         res.status(200).json(data);
     } catch(e) {
         console.log('Error:', e.stack);

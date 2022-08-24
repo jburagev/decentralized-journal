@@ -16,14 +16,17 @@ import {AppSettings} from '../appSettings';
 
 export class HomeComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    
+  }
   foundAccountMetamask:boolean = false
   foundAccountJournal:boolean = false
   creatingUser:boolean = false
   createdUserInfo:string = ""
   account:any = ""
+  userType:string = ""
 
-  
+  provider = new ethers.providers.Web3Provider(window.ethereum as any);
   
   
   web3 = new Web3("https://rinkeby.infura.io/v3/");
@@ -43,7 +46,34 @@ export class HomeComponent implements OnInit {
         this.foundAccountMetamask = true;
         console.log(racuni[0])
 
+          this.http.get<any>('http://localhost:8083/authorize/' + racuni[0]).subscribe({
+            next: data => {
+                console.log(data);
+                if(data != 0 && data != 1 && data != 2 && data != 3){
+                  this.foundAccountJournal = false;
+                  
+                }else{
+                  this.foundAccountJournal = true;
+                  if(data == 0){
+                    this.userType = "Reader";
+                  }
+                  if(data == 1){
+                    this.userType = "Reviewer";
+                  }
+                  if(data == 2){
+                    this.userType = "Editor";
+                  }
+                  if(data == 3){
+                    this.userType = "Author";
+                  }
+                }
 
+            },
+            error: error => {
+              
+                console.error('There was an error!', error);
+            }
+          })
 
         return racuni[0];
       } else return ""
@@ -55,16 +85,13 @@ export class HomeComponent implements OnInit {
 
     this.creatingUser = true
     
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+    await this.provider.send("eth_requestAccounts", []);
     
-    await provider.send("eth_requestAccounts", []);
-    
-    const signer = provider.getSigner();
+    const signer = this.provider.getSigner();
 
     const factory = new ContractFactory(JournalDIDAbi.abi, JournalDIDAbi.data.bytecode.object, signer);
 
-    const price = ethers.utils.formatUnits(await provider.getGasPrice(), 'gwei')
+    const price = ethers.utils.formatUnits(await this.provider.getGasPrice(), 'gwei')
     const options = {gasLimit: 10000000, gasPrice: ethers.utils.parseUnits(price, 'gwei')}
 
     const contract = await factory.deploy(options);
