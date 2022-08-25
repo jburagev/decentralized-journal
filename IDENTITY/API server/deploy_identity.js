@@ -89,21 +89,28 @@ export async function authorizeUser(userAdress) {
         return userType;
 
     }else{
-        
+
         return "User DID adress is not found";
     }
 
 
 }
 
-export async function update_authority_values(contract, wallet_pk, provider_name, new_data) {
+export async function update_authority_values(userAdress, wallet_pk, provider_name, new_data) {
     const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);
     let rawdata = fs.readFileSync('./contract/JournalDID.json');
-    let contractJson = JSON.parse(rawdata.toString()); 
+    let contractJson = JSON.parse(rawdata.toString());
 
-    var user = new ethers.Contract(contract, contractJson.abi, account);
+    let rawdataAuthority = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
+    let contractAuthorityJson = JSON.parse(rawdataAuthority.toString()); 
+
+    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+
+    var userDidAdress = await authorityContract.getUserSmartContractAddr(userAdress); 
+
+    var user = new ethers.Contract(userDidAdress, contractJson.abi, account);
     try {
         if (new_data.authority_address) {
             console.log("updating auth address");
