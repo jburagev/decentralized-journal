@@ -64,6 +64,7 @@ export class SubmitArticleComponent implements OnInit {
                   this.foundAccountJournal = true;
                   if(data == 0){
                     this.userType = "Reader";
+                    this.userAuthorized = false;
                   }
                   if(data == 1){
                     this.userType = "Reviewer";
