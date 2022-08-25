@@ -1,7 +1,14 @@
 <div class="container">
     <div class="row mt-5 justify-content-center">
         <div class="col-sm-10 col-md-8 col-lg-10">
-            <div class="card">
+            <div class="card" *ngIf="!userAuthorized">
+                <div class="card-body">
+                    <span>User is not Author</span>
+                    <br>
+                    <button (click)="submitArticle()" class="btn btn-primary">Apply for author</button>
+                </div>
+            </div>
+            <div class="card" *ngIf="userAuthorized">
                 <div class="card-body">
                     <div class="float-left">
                         <img src="../../assets/43716.jpg" style="width: 300px;">
