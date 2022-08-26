@@ -4,27 +4,90 @@ import si.fri.fog.pojo.Role;
 import si.fri.fog.pojo.User;
 
 import javax.enterprise.context.ApplicationScoped;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import si.fri.fog.services.authorization.IdentityManagement;
 
 import javax.inject.Inject;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
+import lombok.extern.slf4j.Slf4j;
 
+import org.json.simple.parser.ParseException;
+
+@Slf4j
 @ApplicationScoped
 public class UserService {
 
+    @Inject
+    @RestClient
+    IdentityManagement identityManagement;
+
     //TODO: Need information from identity management
     public List<User> getUsers(){
-        return List.of(
+
+        String allUsersJsonString = identityManagement.getAllUsers();
+        
+        JSONParser parser = new JSONParser();  
+        JSONArray json = new JSONArray();
+
+        try {
+                json = (JSONArray) parser.parse(allUsersJsonString);
+        } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                json = null;
+                e.printStackTrace();
+        }  
+
+        List<User> usersAll = new ArrayList<User>();
+
+        for (int i = 0, size = json.size(); i < size; i++)
+        {
+                JSONObject tmpObject = (JSONObject) json.get(i);
+
+                Role tmpRole = null;
+
+                log.info("{}", tmpObject.get("userType"));
+
+                int userTypeInt = Integer.parseInt(tmpObject.get("userType").toString());
+
+                if(userTypeInt == 0){
+                        tmpRole = Role.READER;
+                }
+                if(userTypeInt == 1){
+                        tmpRole = Role.REVIEWER;
+                }
+                if(userTypeInt == 2){
+                        tmpRole = Role.EDITOR;
+                }
+                if(userTypeInt == 3){
+                        tmpRole = Role.AUTHOR;
+                }
+
+                User tmpUser = new User(String.valueOf(tmpObject.get("userAddres")), tmpRole);
+
+                log.info("{}", tmpUser);
+
+                usersAll.add(tmpUser);
+
+        }
+
+        /* return List.of(
                 new User("magerl.zan@gmail.com", Role.AUTHOR),
                 new User("buragev@student.uni-lj.si", Role.EDITOR),
                 new User("buragev1@gmail.com", Role.REVIEWER),
                 new User("jb5000@student.uni-lj.si", Role.AUTHOR),
                 new User("0x6b1ab1fd76d471f7b65cdbe4198b72c2997476f8", Role.AUTHOR)
                 
-        );
+        );*/
+        return usersAll;
     }
 
     public List<User> getEditors(){

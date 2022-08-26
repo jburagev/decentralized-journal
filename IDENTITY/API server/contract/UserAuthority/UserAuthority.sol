@@ -8,6 +8,9 @@ contract UserAuthority {
 
     mapping(address => address) UsersSmartContractsAddrs;
 
+
+    address [] public users;
+
     //mapping(address => uint) index;
     //address[] UsersAdresses;
 
@@ -21,6 +24,9 @@ contract UserAuthority {
         //UsersSmartContracts.push(0x0000000000000000000000000000000000000000);
     }
 
+    function usersSize() public view returns (uint) {
+        return users.length;
+    }
     
     function setAuthority(address _authority) public onlyAuthority {
         authority_address = _authority;
@@ -29,48 +35,22 @@ contract UserAuthority {
     function getAuthority() external view returns (address) {
         return authority_address;
     }
-/*
-    function getUserSmartContractAddr(address currentUser) external view returns (address){
 
-        return UsersSmartContracts[index[currentUser]];
-    }
-*/
     function getUserSmartContractAddr(address userAddr) external view returns (address){
 
         return UsersSmartContractsAddrs[userAddr];
     }
 
-/*
-    function inArray(address who) public view returns (bool) {
-        // address 0x0 is not valid if pos is 0 is not in the array
-        if (who != 0x0000000000000000000000000000000000000000 && index[who] > 0) {
-            return true;
-        }
-        return false;
-    }
-*/
-/*
-    function addUserSmartContractAddr(address userAddr) public onlyAuthority {
 
-        if (!inArray(userAddr)) {
-
-         UsersSmartContracts.push(userAddr);
-
-        index[userAddr] = UsersSmartContracts.length;
-
-            
-        }
-       
-    }
-*/
     function setUserSmartContractAddr(address userAddr,address userSmAddr) public onlyAuthority {
 
-        //need to add if condition in case is not authority to return error
         UsersSmartContractsAddrs[userAddr] = userSmAddr;
+        users.push(userAddr);
        
     }
 
-        function deleteUserContractAddr(address userAddr) public onlyAuthority {
+
+    function deleteUserContractAddr(address userAddr) public onlyAuthority {
 
         //need to add if condition in case is not authority to return error
         UsersSmartContractsAddrs[userAddr] = 0x0000000000000000000000000000000000000000;

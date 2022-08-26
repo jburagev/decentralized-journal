@@ -68,6 +68,38 @@ export async function read(contract, provider_name) {
     return {"owner": owner, "hash": hash, "type": Journal_usertype[type], "authority": authority, "user_data": user_data}
 }
 
+export async function getAllUsers() {
+    let rawdataAuthority = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
+    let contractAuthorityJson = JSON.parse(rawdataAuthority.toString()); 
+
+    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+
+    var users = [];
+
+    var usersSize = await authorityContract.usersSize();
+
+      for(var i = 0; i < usersSize; i++) {
+
+        var userAdress = await authorityContract.users(i);
+        
+
+        var userDidAdress = await authorityContract.getUserSmartContractAddr(userAdress);
+
+        console.log(userDidAdress);
+
+        let rawdata = fs.readFileSync('./contract/JournalDID.json');
+        let contractJson = JSON.parse(rawdata.toString()); 
+        var user = new ethers.Contract(userDidAdress, contractJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+
+        var userType = await user.getType();
+
+    
+        users.push({"userAddres": userAdress, "userType":userType});
+      }
+    
+    return users
+}
+
 export async function authorizeUser(userAdress) {
     let rawdataAuthority = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
     let contractAuthorityJson = JSON.parse(rawdataAuthority.toString()); 
@@ -117,6 +149,7 @@ export async function update_authority_values(userAdress, wallet_pk, provider_na
             await user.setAuthority(String(new_data.authority_address));
         }
         if (new_data.type) {
+            // TO DO When updating user type cannot be updated right away because of the smart contract interaction need to fix
             console.log("updating user type");
             if (new_data.type == 1) await user.setAuthorType();
             else if (new_data.type == 2) await user.setReviewerType();

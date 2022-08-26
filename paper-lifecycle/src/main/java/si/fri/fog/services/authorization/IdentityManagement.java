@@ -25,6 +25,10 @@ public interface IdentityManagement {
     @Path("read/{provider}/{address}")
     String getUserMetadata(@PathParam("provider") String provider,@PathParam("address") String address);
 
+    @GET
+    @Path("/getAllUsers")
+    String getAllUsers();
+
     @Path("/editor")
     User getEditors();
 

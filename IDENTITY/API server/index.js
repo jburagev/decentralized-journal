@@ -4,7 +4,7 @@ import fs from 'fs';
 import bodyParser from "body-parser";
 
 import { cyrb53, verify_user } from "./verify_identity.js";
-import { create, read, update_authority_values, update_owner_values, delete_user, update_authority_SmartContract_onCreate,authorizeUser } from "./deploy_identity.js";
+import { create, read, update_authority_values, update_owner_values, delete_user, update_authority_SmartContract_onCreate,authorizeUser, getAllUsers } from "./deploy_identity.js";
 import CONFIG from './config.js';
 
 //https://buddy.works/guides/how-dockerize-node-application
@@ -112,6 +112,19 @@ app.get('/delete/:provider/:id', async function (req, res) {
     }
     return 
 });
+
+app.get('/getAllUsers', async function (req, res) {
+    try { 
+        console.log("Getting all users");    
+        var data = await getAllUsers();
+        res.status(200).json(data);
+    } catch(e) {
+        console.log('Error:', e.stack);
+        res.status(500).json(e.stack);
+    }
+    return 
+});
+
 
 app.get('/verify/:provider/:id', async function (req, res) {
     try { 

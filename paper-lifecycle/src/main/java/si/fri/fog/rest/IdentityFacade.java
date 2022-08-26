@@ -4,8 +4,10 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
-
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +19,12 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import si.fri.fog.pojo.Role;
+import si.fri.fog.pojo.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Path("/userManagment")
@@ -90,5 +98,75 @@ public class IdentityFacade {
 
         return Response.ok().entity(userData).build();
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("getAllUsers")
+    @Operation(summary = "Get all users", description = "Get all users from identity managment microservice")
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved users"
+            ),
+            @APIResponse(
+                    responseCode = "400",
+                    description = "Something went wrong with retrieving users"
+            )
+    })
+
+    public Response getAllUsers(){
+
+
+        String allUsersJsonString = identityManagement.getAllUsers();
+        
+        JSONParser parser = new JSONParser();  
+        JSONArray json = new JSONArray();
+
+        try {
+                json = (JSONArray) parser.parse(allUsersJsonString);
+        } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                json = null;
+                e.printStackTrace();
+        }  
+
+
+        List<User> usersAll = new ArrayList<User>();
+
+        for (int i = 0, size = json.size(); i < size; i++)
+        {
+                JSONObject tmpObject = (JSONObject) json.get(i);
+
+                Role tmpRole = null;
+
+                log.info("{}", tmpObject.get("userType"));
+
+                if(Integer.parseInt(tmpObject.get("userType").toString()) == 0){
+                        tmpRole = Role.READER;
+                }
+                if(Integer.parseInt(tmpObject.get("userType").toString()) == 1){
+                        tmpRole = Role.REVIEWER;
+                }
+                if(Integer.parseInt(tmpObject.get("userType").toString()) == 2){
+                        tmpRole = Role.EDITOR;
+                }
+                if(Integer.parseInt(tmpObject.get("userType").toString()) == 3){
+                        tmpRole = Role.AUTHOR;
+                }
+
+                User tmpUser = new User(String.valueOf(tmpObject.get("userAddres")), tmpRole);
+
+                log.info("{}", tmpUser);
+
+                usersAll.add(tmpUser);
+
+        }
+
+        log.info("{}", usersAll);
+
+        return Response.ok().entity("").build();
+    }
+
+    
 
 }

@@ -139,10 +139,7 @@ export class SubmitArticleComponent implements OnInit {
   getArticleByHash = async (): Promise<any> => {
 
     if (typeof window.ethereum !== "undefined") {
-      // Poveži se na MetaMask
-      
-
-      ///////////////////////
+ 
       const racuni: any = await this.ethereum.request({method: "eth_requestAccounts"});
 
 
@@ -153,11 +150,20 @@ export class SubmitArticleComponent implements OnInit {
       
       const signer = provider.getSigner(); 
 
-      const smartcont : any = new ethers.Contract("0xCEBaC8bAbB16cD1BE0F5DD71033C3B43888F059c",testAbi,signer);
+      const smartcont : any = new ethers.Contract("0xe02f26Aa4C8E871B86509D75775df1882F383B6D",testAbi,signer);
 
-      const test = await smartcont.submittedArticles("jovs123");
+      const test = await smartcont.submittedArticles("jovs333");
 
-      console.log(test);
+      const test1 = await smartcont.articlesSize();
+
+      const articles:Array<string> = [];
+
+
+      for(var i = 0; i < parseInt(test1); i++) {
+        articles.push(await smartcont.articles(i));
+      }
+
+      console.log(articles);
 
 
 
