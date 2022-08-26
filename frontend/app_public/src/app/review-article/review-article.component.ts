@@ -14,21 +14,25 @@ export class ReviewArticleComponent implements OnInit {
   articleSelected: boolean = false;
   selectedAlreadyReviewedArticle:boolean = false;
 
+
   account:any = ""
   foundAccountMetamask:boolean = false
   foundAccountJournal:boolean = false
   userAuthorized:boolean = false
   userType:string = ""
+  showUserInfo:boolean = false
+
+  ethereum = window.ethereum as MetaMaskInpageProvider;
 
   constructor(private http: HttpClient) { }
 
   vrniUporabnika = async (): Promise<string> => {
-    const ethereum = window.ethereum as MetaMaskInpageProvider;
+    
 
 
     if (typeof window.ethereum !== "undefined") {
       // Poveži se na MetaMask
-      const racuni: any = await ethereum.request({method: "eth_requestAccounts"});
+      const racuni: any = await this.ethereum.request({method: "eth_requestAccounts"});
 
       
       
@@ -63,6 +67,8 @@ export class ReviewArticleComponent implements OnInit {
                   }
                 }
 
+                this.showUserInfo = true;
+
             },
             error: error => {
               
@@ -90,6 +96,11 @@ export class ReviewArticleComponent implements OnInit {
 
   ngOnInit(): void {
     this.account = this.vrniUporabnika();
+
+    this.ethereum.on('accountsChanged',  (accounts) => {
+      console.log('accountsChanges', accounts);
+      location.reload();
+    });
   }
 
 }

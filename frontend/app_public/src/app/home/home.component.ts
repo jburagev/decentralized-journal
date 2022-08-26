@@ -25,28 +25,33 @@ export class HomeComponent implements OnInit {
   createdUserInfo:string = ""
   account:any = ""
   userType:string = ""
+  showUserInfo:boolean = false
 
   provider = new ethers.providers.Web3Provider(window.ethereum as any);
+
+  ethereum = window.ethereum as MetaMaskInpageProvider;
+  
   
   
   web3 = new Web3("https://rinkeby.infura.io/v3/");
 
   vrniUporabnika = async (): Promise<string> => {
-    const ethereum = window.ethereum as MetaMaskInpageProvider;
+    //const ethereum = window.ethereum as MetaMaskInpageProvider;
 
 
     if (typeof window.ethereum !== "undefined") {
       // Poveži se na MetaMask
-      const racuni: any = await ethereum.request({method: "eth_requestAccounts"});
+      const racuni: any = await this.ethereum.request({method: "eth_requestAccounts"});
 
       
       
+
       if (racuni != null) {
         //alert(racuni[0]);
         this.foundAccountMetamask = true;
         console.log(racuni[0])
 
-          this.http.get<any>('http://localhost:8083/authorize/' + racuni[0]).subscribe({
+      await this.http.get<any>('http://localhost:8083/authorize/' + racuni[0]).subscribe({
             next: data => {
                 console.log(data);
                 if(data != 0 && data != 1 && data != 2 && data != 3){
@@ -68,18 +73,27 @@ export class HomeComponent implements OnInit {
                   }
                 }
 
+            
+
+                this.showUserInfo = true;
             },
             error: error => {
               
                 console.error('There was an error!', error);
             }
           })
+        
+        
 
         return racuni[0];
+
       } else return ""
     } else return "";
   }
 
+  set setUserTypeValue(userType: string){
+    this.userType = userType;
+  }
   
   createUser = async (): Promise<string> => {
 
@@ -159,6 +173,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.account = this.vrniUporabnika();
+
+    this.ethereum.on('accountsChanged',  (accounts) => {
+      console.log('accountsChanges', accounts);
+      location.reload();
+    });
+
+    
   }
 
 }
