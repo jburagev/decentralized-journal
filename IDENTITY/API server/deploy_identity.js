@@ -143,6 +143,10 @@ export async function update_authority_values(userAdress, wallet_pk, provider_na
     var userDidAdress = await authorityContract.getUserSmartContractAddr(userAdress); 
 
     var user = new ethers.Contract(userDidAdress, contractJson.abi, account);
+    var test = await user.getType()
+    console.log("user type" + test);
+    console.log(CONFIG.authority_SmartContract);
+    console.log(userDidAdress);
     try {
         if (new_data.authority_address) {
             console.log("updating auth address");
@@ -151,9 +155,9 @@ export async function update_authority_values(userAdress, wallet_pk, provider_na
         if (new_data.type) {
             // TO DO When updating user type cannot be updated right away because of the smart contract interaction need to fix
             console.log("updating user type");
-            if (new_data.type == 1) await user.setAuthorType();
-            else if (new_data.type == 2) await user.setReviewerType();
-            else if (new_data.type == 3) await user.setEditorType();
+            if (new_data.type == 1) await user.setReviewerType();
+            else if (new_data.type == 2) await user.setEditorType();
+            else if (new_data.type == 3) await user.setAuthorType();
             else console.log("invalid type parameter value");
         }
         

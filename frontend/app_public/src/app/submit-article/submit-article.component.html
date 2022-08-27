@@ -16,8 +16,11 @@
                     <div class="float-right mt-5 mr-5">
                         <h3 class="card-title">John Doe</h3>
                         <h4 class="card-subtitle mb-4 text-muted">7.6.2022</h4>
-                        <button (click)="submitArticle()" class="btn btn-primary">Upload article</button>
-                        <button (click)="getArticleByHash()" class="btn btn-primary">Get SC function</button>
+                       <!-- <button  class="btn btn-primary">Upload article</button> -->
+                        <input type="file" class="file-input" (change)="onFileSelected($event)">
+
+                        
+                       <!-- <button (click)="getArticleByHash()" class="btn btn-primary">Get SC function</button> -->
                     </div>
                     <!--<div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -35,16 +38,26 @@
                   
                   <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">Article name</span>
+                        <span class="input-group-text" id="basic-addon1">Article title</span>
                       </div>
                       <input type="text" id="articleTitle" class="form-control" placeholder="" aria-label="Username" aria-describedby="basic-addon1">
                   </div>
+                  <!--
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Article description:</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-                      </div>
+                    </div>
+                -->
                 </div>
-                <a href="/articles" class="btn btn-success w-25 mx-auto mb-3">Submit article</a>
+                <button  (click)="submitArticle()" class="btn btn-success w-25 mx-auto mb-3">Submit article</button>
+                <br>
+                <div class="alert alert-success mx-auto mb-3" role="alert" *ngIf="articleSubmittedSuccess">
+                    Article submitted successfully
+                </div>
+                <div class="alert alert-danger mx-auto mb-3" role="alert" *ngIf="articleSubmittedFail">
+                    Error while submitting the article!
+                </div>
+                
               </div>
         </div>
     </div>

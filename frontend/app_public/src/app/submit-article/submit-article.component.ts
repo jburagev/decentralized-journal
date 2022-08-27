@@ -40,6 +40,14 @@ export class SubmitArticleComponent implements OnInit {
   userType:string = ""
   showUserInfo:boolean = false
 
+  fileName:string = "";
+
+  upload$:any;
+
+
+  articleSubmittedSuccess:boolean = false
+  articleSubmittedFail:boolean = false
+
   ethereum = window.ethereum as MetaMaskInpageProvider;
 
   vrniUporabnika = async (): Promise<string> => {
@@ -95,10 +103,42 @@ export class SubmitArticleComponent implements OnInit {
     } else return "";
   }
 
+  onFileSelected = async (event:any): Promise<any> => {
+
+    const file:File = event.target.files[0];
+
+    console.log(event.target.files)
+
+    if (file) {
+
+        this.fileName = file.name;
+
+        const formData = new FormData();
+
+        formData.append("thumbnail", file);
+
+        this.upload$ = (metadataId:string) => this.http.post<any>("http://localhost:8080/files/submission/" + metadataId, formData).subscribe({
+          next: data => {
+              console.log(data)
+             
+             
+          },
+          error: error => {
+     
+              console.error('There was an error!', error);
+          }
+      });
+
+        //upload$.subscribe();
+    }
+
+  }
+
 
   submitArticle = async (): Promise<any> => {
 
-
+    this.articleSubmittedSuccess = false
+    this.articleSubmittedSuccess = false
     if (typeof window.ethereum !== "undefined") {
       // Poveži se na MetaMask
       const racuni: any = await this.ethereum.request({method: "eth_requestAccounts"});
@@ -121,9 +161,16 @@ export class SubmitArticleComponent implements OnInit {
         this.http.post<any>('http://localhost:8080/metadata/new', body).subscribe({
           next: data => {
               console.log(data)
+              //window.location.href = '/articles';
+              this.articleSubmittedSuccess = true
+
+              this.upload$(data['metadataId']);
+             
+             
           },
           error: error => {
-            
+            this.articleSubmittedSuccess = false
+            this.articleSubmittedFail = true
               console.error('There was an error!', error);
           }
       })

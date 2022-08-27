@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit {
       if (racuni != null) {
         //alert(racuni[0]);
         this.foundAccountMetamask = true;
-        console.log(racuni[0])
+        
 
       await this.http.get<any>('http://localhost:8083/authorize/' + racuni[0]).subscribe({
             next: data => {
@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
                   }
                 }
 
-            
+                console.log("User type" + data)
 
                 this.showUserInfo = true;
             },
