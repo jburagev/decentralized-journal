@@ -164,7 +164,7 @@ public class IdentityFacade {
 
         log.info("{}", usersAll);
 
-        return Response.ok().entity("").build();
+        return Response.ok().entity(usersAll).build();
     }
 
     
