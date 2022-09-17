@@ -3,6 +3,7 @@ package si.fri.fog.services;
 import si.fri.fog.pojo.Review;
 import si.fri.fog.pojo.User;
 import si.fri.fog.pojo.dtos.ReviewDTO;
+import si.fri.fog.services.authorization.UserService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -16,9 +17,14 @@ public class ReviewerService {
 
     @Inject
     MetadataService metadataService;
+    UserService userService;
 
     public List<Review> getReviews(String id){
         return metadataService.getMetadata(id).getReviews();
+    }
+
+    public User getRandomReviewer(){
+        return userService.getRandomReviewer();
     }
 
     public void addReview(String id, ReviewDTO reviewDTO){

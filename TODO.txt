@@ -1,0 +1,20 @@
+1. When updating user type cannot be updated right away because of the smart contract interaction need to fix - events
+2. Fix message service in saveFinaldecision - Editor service
+3. Need to add to homepage success creating user and error
+4. Need to integrate save final decition on front end in order for article to be uploaded to IPFS
+5. Need to add user to backend when created in list of users
+
+Issues:
+
+1. If users are stored only on blockchain and all the time fetched from there can be really slow. For one user added it increase the loading time for 1 second...
+
+Next steps and decision:
+1. Should i use the temp google cloud for storing or only smart contracts with vote function
+	- There will be one smart contract for Articles Authority which will keep all articles
+	and for each article will be separate smart contract published with all metadata and 
+	statuse. 
+	- The article smart contract will contain the vote function and similar functions for making
+	decisions about the article. Reviews can be saved as well as json similiar as userDID smart contracts
+	- potential issue: slower for fetching articles because of the blockchain
+	- idea: can use both, smart contracts and google cloud as cache for the articles. However every article will be stored on blockchain and
+	will provide integrity 

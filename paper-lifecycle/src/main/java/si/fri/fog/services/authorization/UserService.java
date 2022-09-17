@@ -26,9 +26,12 @@ import org.json.simple.parser.ParseException;
 @ApplicationScoped
 public class UserService {
 
+    List<User> usersAll = new ArrayList<User>();
+
     @Inject
     @RestClient
     IdentityManagement identityManagement;
+
 
     //TODO: Need information from identity management
     public List<User> getUsers(){
@@ -46,7 +49,7 @@ public class UserService {
                 e.printStackTrace();
         }  
 
-        List<User> usersAll = new ArrayList<User>();
+        
 
         for (int i = 0, size = json.size(); i < size; i++)
         {
@@ -95,7 +98,14 @@ public class UserService {
     }
 
     public List<User> getReviewers() {
-        return this.getUsers().stream().filter(user -> user.getRole() == Role.REVIEWER).collect(Collectors.toList());
+        //return this.getUsers().stream().filter(user -> user.getRole() == Role.REVIEWER).collect(Collectors.toList());
+        log.info("{}", "in get revirws");
+        if(this.usersAll.size() == 0){
+                return this.getUsers().stream().filter(user -> user.getRole() == Role.REVIEWER).collect(Collectors.toList());
+        }else{
+                return this.usersAll.stream().filter(user -> user.getRole() == Role.REVIEWER).collect(Collectors.toList());
+        }
+        
     }
 
     public User getRandomEditor(){
@@ -109,7 +119,14 @@ public class UserService {
     }
 
     public User getUser(String email){
-        return getUsers().stream().filter(u -> u.getEmail().equals(email)).findFirst().get();
+        //
+        log.info("{}", this.usersAll.size());
+        if(this.usersAll.size() == 0){
+                return this.getUsers().stream().filter(u -> u.getEmail().equals(email)).findFirst().get();
+        }else{
+                return this.usersAll.stream().filter(u -> u.getEmail().equals(email)).findFirst().get();
+        }
+        
     }
 
 }

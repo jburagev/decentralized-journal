@@ -4,6 +4,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import si.fri.fog.pojo.Review;
+import si.fri.fog.pojo.User;
 import si.fri.fog.pojo.dtos.ReviewDTO;
 import si.fri.fog.services.ReviewerService;
 
@@ -32,6 +33,20 @@ public class ReviewerFacade {
     public Response getReviewers(@PathParam("id") String id) {
         List<Review> reviews = reviewerService.getReviews(id);
         return Response.ok().entity(reviews).build();
+    }
+
+    @GET
+    @Path("/getRandomReviewer")
+    @Operation(summary = "Retrieve random reviewer", description = "Retrieve a random reviewer")
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved reviewers"
+            )
+    })
+    public Response getRandomReviewer() {
+        User reviewer = reviewerService.getRandomReviewer();
+        return Response.ok().entity(reviewer).build();
     }
 
 
