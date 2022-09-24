@@ -48,7 +48,7 @@ export async function create(provider_name, wallet_pk, verifier = authority_addr
     console.log("User address: " + new_account.address);
     fs.appendFileSync('created_accounts.txt', `${new Date().getTime()}: {contract: ${user.address}, account_password: ${new_account.privateKey}} \n`);
 
-    update_authority_SmartContract_onCreate(user.address,"95a61e540fc42d7db8631b11451659a42098311309166ce5ad4aa0e5f11ab7b4",CONFIG.default_provider,new_account.address);
+    update_UserAuthority_SmartContract_onCreate(user.address,"95a61e540fc42d7db8631b11451659a42098311309166ce5ad4aa0e5f11ab7b4",CONFIG.default_provider,new_account.address);
 
     return {"user_password": new_account.privateKey, "contract_address": user.address};
 };
@@ -172,7 +172,7 @@ export async function update_authority_values(userAdress, wallet_pk, provider_na
     return true;
 }
 
-export async function update_authority_SmartContract_onCreate(contract, wallet_pk, provider_name, userAddr) {
+export async function update_UserAuthority_SmartContract_onCreate(contract, wallet_pk, provider_name, userAddr) {
     const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);
@@ -205,21 +205,37 @@ export async function update_authority_SmartContract_onCreate(contract, wallet_p
 }
 
 
-export async function deployArticleSmartContract(articleId) {
+export async function update_ArticleAuthority_SmartContract_onCreate(articleId,contract) {
     const provider = new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key);
-    const wallet = new ethers.Wallet(wallet_pk, provider);
+    const wallet = new ethers.Wallet(CONFIG.wallet_pk, provider);
     const account = wallet.connect(provider);
-    let rawdata = fs.readFileSync('./contract/Article.json');
-    let contractJson = JSON.parse(rawdata.toString());
+    let rawdata = fs.readFileSync('./contract/ArticleAuthority/ArticlesAuthority.json');
+    let contractJson = JSON.parse(rawdata.toString()); 
 
-    const factory = new ethers.ContractFactory(contractJson.abi, contractJson.data.bytecode.object, account)
-    const price = ethers.utils.formatUnits(await provider.getGasPrice(), 'gwei')
-    const options = {gasLimit: 10000000, gasPrice: ethers.utils.parseUnits(price, 'gwei')}
+
+    var authContract = new ethers.Contract(CONFIG.articlesAuthority_SmartContract, contractJson.abi, account);
     
-    const article = await factory.deploy(options)
-    await article.deployed()
+    try {
+       
+            console.log("updating Articles auth smart contract with article address and SM");
 
-    await article.setCloudId(cyrb53(String("f6a474f1-d204-47e6-8f22-704023c63c4b")));
+            await authContract.setArticleSmartContractAddr(articleId,contract);
+
+            let rawdata = fs.readFileSync('./contract/Article.json');
+            let contractJson = JSON.parse(rawdata.toString()); 
+
+            console.log("Updated Articles smart contract");
+            
+            const ArticleSmartContract = new ethers.Contract(contract,contractJson.abi,account)
+
+            await ArticleSmartContract.setCloudId(articleId);
+
+            return {"info": "Article succefsully added to authority Smart contract!"};
+       
+    } catch (e) {
+        console.log(e.message)
+        return {"info": "error while adding Article to Authority smart conctract!"};
+    }
 
 }
 

@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import Web3 from 'web3';
-import { ethers } from "ethers";
+import {ContractFactory, ethers} from "ethers";
 import testAbi from "../../assets/Abis/test.json";
+import ArticleAbi from "../../assets/Abis/Article.json"
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
@@ -43,6 +44,8 @@ export class SubmitArticleComponent implements OnInit {
   fileName:string = "";
 
   upload$:any;
+
+  provider = new ethers.providers.Web3Provider(window.ethereum as any);
 
 
   articleSubmittedSuccess:boolean = false
@@ -165,6 +168,9 @@ export class SubmitArticleComponent implements OnInit {
               this.articleSubmittedSuccess = true
 
               this.upload$(data['metadataId']);
+
+              this.deployArticleSmartContract(data['metadataId']);
+              
              
              
           },
@@ -183,19 +189,64 @@ export class SubmitArticleComponent implements OnInit {
 
   }
 
+  deployArticleSmartContract = async (articleId:any): Promise<any> => {
+
+              await this.provider.send("eth_requestAccounts", []);
+    
+              const signer = this.provider.getSigner();
+
+              const factory = new ContractFactory(ArticleAbi.abi, ArticleAbi.object, signer);
+
+              const price = ethers.utils.formatUnits(await this.provider.getGasPrice(), 'gwei')
+              const options = {gasLimit: 10000000, gasPrice: ethers.utils.parseUnits(price, 'gwei')}
+
+              const contract = await factory.deploy(options);
+
+              contract.deployTransaction
+
+              await contract.deployTransaction.wait();
+
+              //await contract.setCloudId(articleId);
+
+              //await contract.vote('ACCEPT');
+
+              //console.log("Votes: ");
+
+              //console.log(contract.getVotes());
+
+              console.log("Article contract deployed at: " + contract.address);
+
+              console.log("Updating article athority Smart contract...");
+
+              const headers = { 'Content-type': 'application/json', 'Cache-Control': 'no-cache' };
+              const body = { "articleId": articleId ,
+              "articleSmartContractAddress": contract.address };
+              this.http.post<any>('http://localhost:8083/updateArticleAtuhority', body, { headers }).subscribe({
+                next: data => {
+                  console.log(data); 
+                  //this.creatingUser = false;
+                  //this.createdUserInfo = "User Smart contract adress: " + data.contract_address + " User Password: " + data.user_password;
+                  console.log("Successfully updated article authority smart contract");
+                },
+                error: error => {
+                  
+                    console.error('There was an error updating article authority smart contract!', error);
+                }
+                  
+              });
+
+  }
+
   getArticleByHash = async (): Promise<any> => {
 
     if (typeof window.ethereum !== "undefined") {
  
       const racuni: any = await this.ethereum.request({method: "eth_requestAccounts"});
 
-
-     const provider = await new ethers.providers.Web3Provider(window.ethereum);
-
-     if (provider) {
-      console.log(provider); // Initialize your app
+     if (this.provider) {
+      console.log(this.provider); // Initialize your app
       
-      const signer = provider.getSigner(); 
+      const signer = this.provider.getSigner(); 
 
       const smartcont : any = new ethers.Contract("0xe02f26Aa4C8E871B86509D75775df1882F383B6D",testAbi,signer);
 

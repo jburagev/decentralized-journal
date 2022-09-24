@@ -4,7 +4,7 @@ import fs from 'fs';
 import bodyParser from "body-parser";
 
 import { cyrb53, verify_user } from "./verify_identity.js";
-import { create, read, update_authority_values, update_owner_values, delete_user, update_authority_SmartContract_onCreate,authorizeUser, getAllUsers } from "./deploy_identity.js";
+import { create, read, update_authority_values, update_owner_values, delete_user, update_UserAuthority_SmartContract_onCreate,update_ArticleAuthority_SmartContract_onCreate,authorizeUser, getAllUsers } from "./deploy_identity.js";
 import CONFIG from './config.js';
 
 //https://buddy.works/guides/how-dockerize-node-application
@@ -42,7 +42,20 @@ app.post('/create', async function (req, res) {
 app.post('/create', async function (req, res) {
     try { 
         console.log("Creating identity");    
-        var data = await update_authority_SmartContract_onCreate(req.body.userSmartContract,CONFIG.wallet_pk,CONFIG.default_provider,req.body.userWalletAdress);
+        var data = await update_UserAuthority_SmartContract_onCreate(req.body.userSmartContract,CONFIG.wallet_pk,CONFIG.default_provider,req.body.userWalletAdress);
+        res.status(200).json(data);
+    } catch(e) {
+        console.log('Error:', e.stack);
+        res.status(500).json(e.stack);
+    }
+    return 
+});
+
+
+app.post('/updateArticleAtuhority', async function (req, res) {
+    try { 
+        console.log("Updating Articlre Authority smart contract");    
+        var data = await update_ArticleAuthority_SmartContract_onCreate(req.body.articleId,req.body.articleSmartContractAddress);
         res.status(200).json(data);
     } catch(e) {
         console.log('Error:', e.stack);

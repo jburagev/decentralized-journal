@@ -3,6 +3,9 @@
 3. Need to add to homepage success creating user and error
 4. Need to integrate save final decition on front end in order for article to be uploaded to IPFS
 5. Need to add user to backend when created in list of users
+6. Need to make smart contract factory
+7. Need to automate authtoritySMadress in Article.sol now it is hard coded
+8. Article submitted successfully = change to show after authority update
 
 Issues:
 
