@@ -205,6 +205,24 @@ export async function update_authority_SmartContract_onCreate(contract, wallet_p
 }
 
 
+export async function deployArticleSmartContract(articleId) {
+    const provider = new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key);
+    const wallet = new ethers.Wallet(wallet_pk, provider);
+    const account = wallet.connect(provider);
+    let rawdata = fs.readFileSync('./contract/Article.json');
+    let contractJson = JSON.parse(rawdata.toString());
+
+    const factory = new ethers.ContractFactory(contractJson.abi, contractJson.data.bytecode.object, account)
+    const price = ethers.utils.formatUnits(await provider.getGasPrice(), 'gwei')
+    const options = {gasLimit: 10000000, gasPrice: ethers.utils.parseUnits(price, 'gwei')}
+    
+    const article = await factory.deploy(options)
+    await article.deployed()
+
+    await article.setCloudId(cyrb53(String("f6a474f1-d204-47e6-8f22-704023c63c4b")));
+
+}
+
 export async function update_owner_values(contract, wallet_pk, provider_name, new_data) {
     const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
     const wallet = new ethers.Wallet(wallet_pk, provider);

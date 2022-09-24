@@ -15,18 +15,19 @@ contract Article {
 
     address authtoritySMadress = 0x2c6398652F40970e1897B07F472684c4B431ec6f;
 
-    enum ArticleStatus { none, voting, revise, done}
-
+    enum ArticleStatus { NONE, VOTING, PUBLISHED,REJECTED}
+    
     string ipfsHash;
+    string cloudId;
     ArticleStatus status;
 
     uint256 submissionTime;
+    uint256 publishonTime;
 
-    enum EditorDecision {ACCEPT,REJECT}
-    uint8 public voteCount;
+    enum EditorDecision {NONE,ACCEPT,REJECT}
     mapping(address => EditorDecision) votes;
     address []  votesAdresses;
-    int [] votesReturn;
+    uint [] votesMatrix;
 
     uint32 collateralTotal;
     mapping(address => uint256) requestTimes;
@@ -41,6 +42,7 @@ contract Article {
 
     constructor() {
         authorAddress = msg.sender;
+        status = ArticleStatus.VOTING;
 
     }
 
@@ -52,20 +54,55 @@ contract Article {
             getUserRole(msg.sender) == JournalDID.Journal_usertype.EDITOR,
             "You must be a editor to vote for an acceptance of an article."
         );
+
+        require(
+           votes[msg.sender] == EditorDecision.NONE,
+            "You already casted a vote for this article"
+        );
+
+        require(
+            votesMatrix.length < REQUIRED_VOTES,
+            "Article has been voted. You cannot sumbit the voting anymore."
+        );
+
+        
         
         if(keccak256(bytes(decison))  == keccak256(bytes("ACCEPT"))){
  
             votes[msg.sender] = EditorDecision.ACCEPT;
             votesAdresses.push(msg.sender);
-            votesReturn.push(1);
+            votesMatrix.push(1);
+
         }
 
         if(keccak256(bytes(decison))  == keccak256(bytes("REJECT"))){
             votes[msg.sender] = EditorDecision.REJECT;
             votesAdresses.push(msg.sender);
-            votesReturn.push(0);
+            votesMatrix.push(0);
+
+        }
+
+        if (votesMatrix.length == REQUIRED_VOTES) {
+            makeDecision();
         }
             
+
+    }
+
+    function makeDecision() internal {
+
+        uint votesSum = 0;
+
+        for(uint i=0; i<votesMatrix.length; i++){
+               votesSum = votesSum + votesMatrix[i];
+        }
+
+        //potential issue if required_votes is changed to 4 or 6 or so on
+        if((votesSum / votesMatrix.length) * 100 > 50){
+            status = ArticleStatus.PUBLISHED;
+        }else{
+             status = ArticleStatus.REJECTED;
+        }
 
     }
 
@@ -82,7 +119,7 @@ contract Article {
     }
 
 
-    function getVotes() public view returns (int [] memory) {
+    function getVotes() public view returns (uint [] memory) {
 
         
 /*
@@ -95,7 +132,12 @@ contract Article {
             
         }
 */
-        return votesReturn;
+        return votesMatrix;
+    }
+
+    function getVoteByAddress() public view returns (EditorDecision) {
+
+        return votes[msg.sender];
     }
 
 }

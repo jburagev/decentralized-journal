@@ -18,3 +18,9 @@ Next steps and decision:
 	- potential issue: slower for fetching articles because of the blockchain
 	- idea: can use both, smart contracts and google cloud as cache for the articles. However every article will be stored on blockchain and
 	will provide integrity 
+
+
+Discussions:
+
+1. In smart contract Article.sol -> In the make decision function now is defined to get accepted if 3 votes required and it is over 50%. If this required votes is change
+to 4 it will be a problem since can be equal number of rejects and accepts... need to be properly defined

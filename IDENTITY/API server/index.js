@@ -101,6 +101,18 @@ app.post('/user_update/:provider/:id', async function (req, res) {
     return 
 });
 
+app.post('/articleSmTest/:id', async function (req, res) {
+    try { 
+        console.log("Testing article smart contract deploy");    
+        var data = await deployArticleSmartContract(req.params.id);
+        res.status(200).json(data);
+    } catch(e) {
+        console.log('Error:', e.stack);
+        res.status(500).json(e.stack);
+    }
+    return 
+});
+
 app.get('/delete/:provider/:id', async function (req, res) {
     try { 
         console.log("Removing user");    
