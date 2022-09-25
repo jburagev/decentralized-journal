@@ -3,6 +3,20 @@ import { MetaMaskInpageProvider } from "@metamask/providers";
 
 import { HttpClient } from '@angular/common/http';
 
+
+interface Article {
+  cid: Number;
+  id: String;
+  reviews: Number;
+  revision: String;
+  stage: String;
+  submission: String;
+  submittedDate: String;
+  title:String;
+  user: String;
+}
+
+
 @Component({
   selector: 'app-review-article',
   templateUrl: './review-article.component.html',
@@ -21,6 +35,9 @@ export class ReviewArticleComponent implements OnInit {
   userAuthorized:boolean = false
   userType:string = ""
   showUserInfo:boolean = false
+
+
+  submittedArticles: Article[] = [];
 
   ethereum = window.ethereum as MetaMaskInpageProvider;
 
@@ -82,11 +99,11 @@ export class ReviewArticleComponent implements OnInit {
   }
 
   
-  test(id: number){
+  test(id: String){
     console.log(id)
     this.articleSelected = true;
-    if (id==4)
-      this.selectedAlreadyReviewedArticle = true;
+    //if (id==4)
+    //  this.selectedAlreadyReviewedArticle = true;
   }
 
   reset(){
@@ -101,6 +118,43 @@ export class ReviewArticleComponent implements OnInit {
       console.log('accountsChanges', accounts);
       location.reload();
     });
+
+    this.listArticlesUnderReview();
+  }
+
+  listArticlesUnderReview = async (): Promise<any> => {
+
+    const ethereum = window.ethereum as MetaMaskInpageProvider;
+
+    if (typeof window.ethereum !== "undefined") {
+      // Poveži se na MetaMask
+      const racuni: any = await ethereum.request({method: "eth_requestAccounts"});
+
+      
+      
+      if (racuni != null) {
+        //alert(racuni[0]);
+
+        const { utils } = require('ethers');
+
+        console.log(utils.getAddress(racuni[0]));
+
+        this.http.get<any>('http://localhost:8080/author/' + utils.getAddress(racuni[0]) + '/articleSubmitted').subscribe({
+          next: data => {
+              console.log(data)
+              this.submittedArticles = data; 
+
+          },
+          error: error => {
+            
+              console.error('There was an error!', error);
+          }
+        });
+        
+      } 
+    }
+
+
   }
 
 }

@@ -16,48 +16,9 @@
 </nav>
 <div class="tab-content mt-5" id="nav-tabContent">
     <div class="tab-pane fade show active" id="nav-all-articles" role="tabpanel" aria-labelledby="nav-all-articles-tab">
-        <!--
-        <div class="card ml-5 mr-5 mt-3 bg-success thumbnail">
-            <a>
-                <div class="card-header">
-                    <div class="float-left">
-                        <h4>Article title</h4>
-                    </div>
-                    <div class="float-right">
-                        <p class="text-right">Article approved</p>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-            <div class="card-body bg-light">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card ml-5 mr-5 mt-3 thumbnail bg-danger">
-            <a>
-                <div class="card-header">
-                    <div class="float-left">
-                        <h4>Article title</h4>
-                    </div>
-                    <div class="float-right">
-                        Article rejected
-                        <button class="btn btn-light ml-2">Appeal</button>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-            <div class="card-body bg-light">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
-                    content. This content is a little bit longer.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div> -->
         <div *ngFor="let article of articles" class="card ml-5 mr-5 mt-3 thumbnail "  >
             <a>
-                <div class="card-header" [ngClass]="{'bg-warning': article.stage == 'SUBMITTED', 'bg-success': article.stage == 'ACCEPTED'}">
+                <div class="card-header" [ngClass]="{'bg-warning': article.stage == 'SUBMITTED', 'bg-success': article.stage == 'ACCEPTED',  'bg-danger': article.stage == 'REJECTED'}">
                     <div class="float-left" >
                         <h4>{{article.title}}</h4>
                     </div>
@@ -78,22 +39,23 @@
     <div class="tab-pane fade" id="nav-approved-articles" role="tabpanel" aria-labelledby="nav-approved-articles-tab">
         <div class="tab-pane fade show active" id="nav-all-articles" role="tabpanel"
             aria-labelledby="nav-all-articles-tab">
-            <div class="card ml-5 mr-5 mt-3 thumbnail bg-success">
+            <div *ngFor="let article of acceptedArticles" class="card ml-5 mr-5 mt-3 thumbnail "  >
                 <a>
-                    <div class="card-header">
-                        <div class="float-left">
-                            <h4>Article title</h4>
+                    <div class="card-header" [ngClass]="{'bg-warning': article.stage == 'SUBMITTED', 'bg-success': article.stage == 'ACCEPTED',  'bg-danger': article.stage == 'REJECTED'}">
+                        <div class="float-left" >
+                            <h4>{{article.title}}</h4>
                         </div>
                         <div class="float-right">
-                            <p class="text-right">Article approved</p>
+                            <p class="text-right">{{article.stage}}</p>
                         </div>
                         <div class="clearfix"></div>
                     </div>
                 </a>
-                <div class="card-body bg-light">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <div class="card-body bg-light" >
+                    <h5 class="card-title">ID: {{article.id}}</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+                        content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Submitted {{article.submittedDate}}</small></p>
                 </div>
             </div>
         </div>
@@ -101,46 +63,46 @@
     <div class="tab-pane fade" id="nav-rejected-articles" role="tabpanel" aria-labelledby="nav-rejected-articles-tab">
         <div class="tab-pane fade show active" id="nav-all-articles" role="tabpanel"
             aria-labelledby="nav-all-articles-tab">
-            <div class="card ml-5 mr-5 mt-3 thumbnail bg-danger">
+            <div *ngFor="let article of rejectedArticles" class="card ml-5 mr-5 mt-3 thumbnail "  >
                 <a>
-                    <div class="card-header">
-                        <div class="float-left">
-                            <h4>Article title</h4>
+                    <div class="card-header" [ngClass]="{'bg-warning': article.stage == 'SUBMITTED', 'bg-success': article.stage == 'ACCEPTED',  'bg-danger': article.stage == 'REJECTED'}">
+                        <div class="float-left" >
+                            <h4>{{article.title}}</h4>
                         </div>
                         <div class="float-right">
-                            <p class="text-right">Article rejected</p>
+                            <p class="text-right">{{article.stage}}</p>
                         </div>
                         <div class="clearfix"></div>
                     </div>
                 </a>
-                <div class="card-body bg-light">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <div class="card-body bg-light" >
+                    <h5 class="card-title">ID: {{article.id}}</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
+                        content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Submitted {{article.submittedDate}}</small></p>
                 </div>
             </div>
         </div>
     </div>
     <div class="tab-pane fade" id="nav-articles-under-review" role="tabpanel"
         aria-labelledby="nav-articles-under-review-tab">
-        <div class="card ml-5 mr-5 mt-3 thumbnail bg-warning">
+        <div *ngFor="let article of submittedArticles" class="card ml-5 mr-5 mt-3 thumbnail "  >
             <a>
-                <div class="card-header">
-                    <div class="float-left">
-                        <h4>Article title</h4>
+                <div class="card-header" [ngClass]="{'bg-warning': article.stage == 'SUBMITTED', 'bg-success': article.stage == 'ACCEPTED',  'bg-danger': article.stage == 'REJECTED'}">
+                    <div class="float-left" >
+                        <h4>{{article.title}}</h4>
                     </div>
                     <div class="float-right">
-                        <p class="text-right">Article under review</p>
+                        <p class="text-right">{{article.stage}}</p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
             </a>
-            <div class="card-body bg-light">
-                <h5 class="card-title">Card title</h5>
+            <div class="card-body bg-light" >
+                <h5 class="card-title">ID: {{article.id}}</h5>
                 <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional
                     content. This content is a little bit longer.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <p class="card-text"><small class="text-muted">Submitted {{article.submittedDate}}</small></p>
             </div>
         </div>
     </div>

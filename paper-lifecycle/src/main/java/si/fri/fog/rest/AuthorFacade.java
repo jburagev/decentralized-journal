@@ -49,4 +49,56 @@ public class AuthorFacade {
         return Response.ok().entity(metadataService.getMetadata(user)).build();
     }
 
+
+    @GET
+    @Path("/{address}/articleAccepted/")
+    @Operation(summary = "Get user's accepted articles", description = "Get all accepted articles from given user")
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved accepted articles",
+                    content = @Content(
+                            schema = @Schema(implementation = Metadata[].class)
+                    )
+            )
+    })
+    public Response getArticlesFromUserAccepted(@Parameter(description = "The address for", required = true) @PathParam("address") String address) {
+        User user = userService.getUser(address);
+        return Response.ok().entity(metadataService.getAcceptedArticlesForUser(user)).build();
+    }
+
+    @GET
+    @Path("/{address}/articleRejected/")
+    @Operation(summary = "Get user's rejected articles", description = "Get all rejected articles from given user")
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved rejected articles",
+                    content = @Content(
+                            schema = @Schema(implementation = Metadata[].class)
+                    )
+            )
+    })
+    public Response getArticlesFromUserRejected(@Parameter(description = "The address for", required = true) @PathParam("address") String address) {
+        User user = userService.getUser(address);
+        return Response.ok().entity(metadataService.getRejectedArticlesForUser(user)).build();
+    }
+
+    @GET
+    @Path("/{address}/articleSubmitted/")
+    @Operation(summary = "Get user's submitted articles", description = "Get all submitted articles from given user")
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved submitted articles",
+                    content = @Content(
+                            schema = @Schema(implementation = Metadata[].class)
+                    )
+            )
+    })
+    public Response getArticlesFromUserSubmitted(@Parameter(description = "The address for", required = true) @PathParam("address") String address) {
+        User user = userService.getUser(address);
+        return Response.ok().entity(metadataService.getSubmittedArticlesForUser(user)).build();
+    }
+
 }

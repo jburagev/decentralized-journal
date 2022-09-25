@@ -64,6 +64,7 @@ public class FirestoreService {
             }
         }).collect(Collectors.toList());
     }
+    
 
     public void updateMetadata(String id, Metadata metadata){
         String documentId = getDocumentIdFromArticle(id);
@@ -83,6 +84,40 @@ public class FirestoreService {
     public List<String> getArticlesFromUser(User user){
         var metadatas = firestore.collection(METADATA_COLLECTION);
         Query query = metadatas.whereEqualTo("user", user.getEmail());
+
+        try {
+            return query.get().get().getDocuments().stream().map(e -> (String)e.get("id")).collect(Collectors.toList());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> getArticlesFromUserAccepted(User user){
+        var metadatas = firestore.collection(METADATA_COLLECTION);
+        Query query = metadatas.whereEqualTo("user", user.getEmail()).whereEqualTo("stage", "ACCEPTED");
+
+        try {
+            return query.get().get().getDocuments().stream().map(e -> (String)e.get("id")).collect(Collectors.toList());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> getArticlesFromUserRejected(User user){
+        var metadatas = firestore.collection(METADATA_COLLECTION);
+        Query query = metadatas.whereEqualTo("user", user.getEmail()).whereEqualTo("stage", "REJECTED");
+
+        try {
+            return query.get().get().getDocuments().stream().map(e -> (String)e.get("id")).collect(Collectors.toList());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+
+    public List<String> getArticlesFromUserSubmitted(User user){
+        var metadatas = firestore.collection(METADATA_COLLECTION);
+        Query query = metadatas.whereEqualTo("user", user.getEmail()).whereEqualTo("stage", "SUBMITTED");
 
         try {
             return query.get().get().getDocuments().stream().map(e -> (String)e.get("id")).collect(Collectors.toList());

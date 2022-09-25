@@ -27,3 +27,7 @@ Discussions:
 
 1. In smart contract Article.sol -> In the make decision function now is defined to get accepted if 3 votes required and it is over 50%. If this required votes is change
 to 4 it will be a problem since can be equal number of rejects and accepts... need to be properly defined
+
+Ideas:
+
+1. Use smart contracts for all data. Load the data in backend on initialization. Than load new articles and changes as they come

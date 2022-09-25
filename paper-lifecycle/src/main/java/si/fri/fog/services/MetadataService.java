@@ -48,6 +48,22 @@ public class MetadataService {
         return firestoreService.getMetadata(id);
     }
 
+
+    public List<Metadata> getAcceptedArticlesForUser(User user){
+        List<String> articles = firestoreService.getArticlesFromUserAccepted(user);
+        return articles.stream().map(article -> firestoreService.getMetadata(article)).collect(Collectors.toList());
+    }
+
+    public List<Metadata> getRejectedArticlesForUser(User user){
+        List<String> articles = firestoreService.getArticlesFromUserRejected(user);
+        return articles.stream().map(article -> firestoreService.getMetadata(article)).collect(Collectors.toList());
+    }
+
+    public List<Metadata> getSubmittedArticlesForUser(User user){
+        List<String> articles = firestoreService.getArticlesFromUserSubmitted(user);
+        return articles.stream().map(article -> firestoreService.getMetadata(article)).collect(Collectors.toList());
+    }
+
     public List<Metadata> getMetadata(User user){
         List<String> articles = firestoreService.getArticlesFromUser(user);
         return articles.stream().map(article -> firestoreService.getMetadata(article)).collect(Collectors.toList());
