@@ -13,10 +13,10 @@
         <div class="nav nav-tabs mt-5" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-articles-under-review-tab" data-toggle="tab"
                 href="#nav-articles-under-review" role="tab" aria-controls="nav-articles-under-review" aria-selected="true"
-                (click)="reset()">Articles under review <span class="badge badge-light">3</span></a>
+                (click)="reset()">Articles under review <span class="badge badge-light">{{submittedArticles.length}}</span></a>
             <a class="nav-item nav-link" (click)="reset()" id="nav-reviewed-articles-tab" data-toggle="tab"
                 href="#nav-reviewed-articles" role="tab" aria-controls="nav-reviewed-articles"
-                aria-selected="false">Reviewed articles<span class="badge badge-light">1</span></a>
+                aria-selected="false">Reviewed articles<span class="badge badge-light">{{reviewedArticles.length}}</span></a>
         </div>
     </nav>
     <div *ngIf="!articleSelected" class="tab-content mt-5" id="nav-tabContent">
@@ -45,7 +45,7 @@
         <div class="tab-pane fade" id="nav-reviewed-articles" role="tabpanel" aria-labelledby="nav-reviewed-articles-tab">
             <div class="tab-pane fade show active" id="nav-articles-under-review" role="tabpanel"
                 aria-labelledby="nav-articles-under-review-tab">
-                <div class="card ml-5 mr-5 mt-3 bg-success thumbnail">
+                <div *ngFor="let article of reviewedArticles" class="card ml-5 mr-5 mt-3 bg-success thumbnail">
                     <a (click)="test('4')">
                         <div class="card-header">
                             <div class="float-left">

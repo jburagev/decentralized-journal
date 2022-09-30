@@ -48,6 +48,11 @@ public class MetadataService {
         return firestoreService.getMetadata(id);
     }
 
+    public List<Metadata> getMetadataFilteredByStatus(String status){
+        List<String> articles = firestoreService.getMetadataFilterByStatus(status);
+        return articles.stream().map(article -> firestoreService.getMetadata(article)).collect(Collectors.toList());
+    }
+
 
     public List<Metadata> getAcceptedArticlesForUser(User user){
         List<String> articles = firestoreService.getArticlesFromUserAccepted(user);

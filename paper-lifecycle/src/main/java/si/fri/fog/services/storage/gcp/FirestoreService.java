@@ -54,6 +54,17 @@ public class FirestoreService {
         }
     }
 
+    public List<String> getMetadataFilterByStatus(String status){
+        var metadatas = firestore.collection(METADATA_COLLECTION);
+        Query query = metadatas.whereEqualTo("stage", status);
+
+        try {
+            return query.get().get().getDocuments().stream().map(e -> (String)e.get("id")).collect(Collectors.toList());
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Metadata> getMetadata(){
         var documents = Lists.newArrayList(firestore.collection(METADATA_COLLECTION).listDocuments().iterator());
         return documents.stream().map(element -> {

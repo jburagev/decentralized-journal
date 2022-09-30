@@ -39,6 +39,8 @@ export class ReviewArticleComponent implements OnInit {
 
   submittedArticles: Article[] = [];
 
+  reviewedArticles: Article[] = [];
+
   ethereum = window.ethereum as MetaMaskInpageProvider;
 
   constructor(private http: HttpClient) { }
@@ -98,6 +100,16 @@ export class ReviewArticleComponent implements OnInit {
     } else return "";
   }
 
+
+  getSizeSubmittedArticles(){
+
+    return this.submittedArticles.length;
+  }
+
+  getSizeReviewedArticles(){
+
+    return this.reviewedArticles.length;
+  }
   
   test(id: String){
     console.log(id)
@@ -120,6 +132,7 @@ export class ReviewArticleComponent implements OnInit {
     });
 
     this.listArticlesUnderReview();
+    this.listArticlesSubmitted();
   }
 
   listArticlesUnderReview = async (): Promise<any> => {
@@ -139,10 +152,23 @@ export class ReviewArticleComponent implements OnInit {
 
         console.log(utils.getAddress(racuni[0]));
 
-        this.http.get<any>('http://localhost:8080/author/' + utils.getAddress(racuni[0]) + '/articleSubmitted').subscribe({
+        this.http.get<any>('http://localhost:8080/metadata').subscribe({
           next: data => {
-              console.log(data)
-              this.submittedArticles = data; 
+             // console.log(data)
+              
+              var filteredArray = data.filter(function (article:any) {
+
+                if(article.reviews){
+                    return article.reviews.some(function (dptAccess:any) {
+                      return dptAccess.user === utils.getAddress(racuni[0])
+                  });
+                }
+            });
+
+              console.log(this.getSizeSubmittedArticles());
+              this.reviewedArticles = filteredArray;
+
+             
 
           },
           error: error => {
@@ -156,5 +182,41 @@ export class ReviewArticleComponent implements OnInit {
 
 
   }
+
+  listArticlesSubmitted = async (): Promise<any> => {
+
+    const ethereum = window.ethereum as MetaMaskInpageProvider;
+
+    if (typeof window.ethereum !== "undefined") {
+      // Poveži se na MetaMask
+      const racuni: any = await ethereum.request({method: "eth_requestAccounts"});
+
+    
+      if (racuni != null) {
+        //alert(racuni[0]);
+
+        const { utils } = require('ethers');
+
+        console.log(utils.getAddress(racuni[0]));
+
+        this.http.get<any>('http://localhost:8080/metadata/filterByStatus/SUBMITTED').subscribe({
+          next: data => {
+              console.log(data)
+            
+              this.submittedArticles = data;
+
+          },
+          error: error => {
+            
+              console.error('There was an error!', error);
+          }
+        });
+        
+      } 
+    }
+
+
+  }
+
 
 }

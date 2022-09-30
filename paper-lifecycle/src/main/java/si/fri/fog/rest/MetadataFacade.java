@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -67,6 +68,27 @@ public class MetadataFacade {
     })
     public Response getMetadata(@PathParam("id") String id){
         Metadata metadata = metadataService.getMetadata(id);
+        if (metadata != null) {
+            return Response.ok().entity(metadata).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST).build();
+    }
+
+    @GET
+    @Path("filterByStatus/{status}")
+    @Operation(summary = "Retrieve all submitted articles metadata", description = "Retrieve all submitted metadata articles")
+    @APIResponses({
+            @APIResponse(
+                    responseCode = "200",
+                    description = "Successfully retrieved metadata"
+            ),
+            @APIResponse(
+                    responseCode = "400",
+                    description = "Something went wrong with retrieving the articles metadata"
+            )
+    })
+    public Response getMetadataFilteredByStatus(@PathParam("status") String status){
+        List<Metadata> metadata = metadataService.getMetadataFilteredByStatus(status);
         if (metadata != null) {
             return Response.ok().entity(metadata).build();
         }
