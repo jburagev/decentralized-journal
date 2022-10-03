@@ -141,7 +141,7 @@ export class SubmitArticleComponent implements OnInit {
   submitArticle = async (): Promise<any> => {
 
     this.articleSubmittedSuccess = false
-    this.articleSubmittedSuccess = false
+    
     if (typeof window.ethereum !== "undefined") {
       // Poveži se na MetaMask
       const racuni: any = await this.ethereum.request({method: "eth_requestAccounts"});

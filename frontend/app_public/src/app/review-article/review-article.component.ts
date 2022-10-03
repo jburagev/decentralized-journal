@@ -1,13 +1,17 @@
 import { Component, Injectable, OnInit } from '@angular/core';
 import { MetaMaskInpageProvider } from "@metamask/providers";
 
+import { saveAs } from 'file-saver';
+
 import { HttpClient } from '@angular/common/http';
+import { ArticlesComponent } from '../articles/articles.component';
+
 
 
 interface Article {
-  cid: Number;
+  cid: String;
   id: String;
-  reviews: Number;
+  reviews: String;
   revision: String;
   stage: String;
   submission: String;
@@ -15,6 +19,42 @@ interface Article {
   title:String;
   user: String;
 }
+
+
+
+/*
+class Article {
+  cid: String;
+  id: String;
+  reviews: String;
+  revision: String;
+  stage: String;
+  submission: String;
+  submittedDate: String;
+  title:String;
+  user: String;
+ 
+  constructor(cid: String, id: String,reviews: String, revision: String, stage:String,submission:String,submittedDate:String,title:String,user:String) {
+    this.cid = cid;
+    this.id = id;
+    this.reviews = reviews;
+    this.revision = revision;
+    this.stage = stage;
+    this.submission = submission;
+    this.submittedDate = submittedDate;
+    this.title = title;
+    this.user = user;
+
+  }
+
+  public setcid(cid:String){
+
+    return this.cid = cid;
+  }
+
+
+}
+*/
 
 
 @Component({
@@ -26,8 +66,21 @@ interface Article {
 @Injectable()
 export class ReviewArticleComponent implements OnInit {
   articleSelected: boolean = false;
+  articleForReviewSelected: boolean = false;
+
   selectedAlreadyReviewedArticle:boolean = false;
 
+  selectedArticle : any = {
+    cid: "",
+    id: "",
+    reviews: "",
+    revision: "",
+    stage: "",
+    submission: "",
+    submittedDate: "",
+    title: "",
+    user: ""
+  };
 
   account:any = ""
   foundAccountMetamask:boolean = false
@@ -35,6 +88,8 @@ export class ReviewArticleComponent implements OnInit {
   userAuthorized:boolean = false
   userType:string = ""
   showUserInfo:boolean = false
+  reviewSubmittedSuccess = false
+  reviewSubmittedFail:boolean = false
 
 
   submittedArticles: Article[] = [];
@@ -116,6 +171,120 @@ export class ReviewArticleComponent implements OnInit {
     this.articleSelected = true;
     //if (id==4)
     //  this.selectedAlreadyReviewedArticle = true;
+  }
+
+  selectedArticleForReview = async (id: String): Promise<any> => {
+    console.log(id)
+    this.articleSelected = true;
+    this.articleForReviewSelected = true;
+
+    const ethereum = window.ethereum as MetaMaskInpageProvider;
+
+    if (typeof window.ethereum !== "undefined") {
+      // Poveži se na MetaMask
+      const racuni: any = await ethereum.request({method: "eth_requestAccounts"});
+
+      
+      
+      if (racuni != null) {
+        //alert(racuni[0]);
+
+        
+        this.http.get<Article>('http://localhost:8080/metadata/' + id).subscribe({
+          next: data => {
+             // console.log(data)
+          
+            //let jsonObj = JSON.parse(data.toString());
+            this.selectedArticle = data;
+
+            this.selectedArticle.submittedDate = (new Date(this.selectedArticle.submittedDate)).toLocaleDateString('en-US');
+
+            console.log(this.articleSelected);
+
+          },
+          error: error => {
+            
+              console.error('There was an error!', error);
+          }
+        });
+        
+      } 
+    }
+
+    //if (id==4)
+    //  this.selectedAlreadyReviewedArticle = true;
+  }
+
+
+  downloadArticle = async (id: String): Promise<any> => {
+
+    const requestOptions: Object = {
+      /* other options here */
+      responseType: 'arraybuffer'
+    }
+    
+    this.http.get<any>('http://localhost:8080/files/submission/' + id,requestOptions).subscribe({
+          next: data => {
+            
+            let blob = new Blob([data], {'type': "application/octet-stream"});
+            saveAs(blob, id + ".pdf");
+
+          },
+          error: error => {
+            
+              console.error('There was an error downloading article!', error);
+          }
+        });
+
+  }
+
+  submitReview = async (id: String): Promise<any> => {
+
+    this.reviewSubmittedSuccess = false;
+
+    if (typeof window.ethereum !== "undefined") {
+      // Poveži se na MetaMask
+      const racuni: any = await this.ethereum.request({method: "eth_requestAccounts"});
+
+      
+      
+      if (racuni != null) {
+        //alert(racuni[0]);
+  
+
+          const { utils } = require('ethers');
+
+        console.log(utils.getAddress(racuni[0]));
+
+
+          const input = document.getElementById('reviewText') as HTMLInputElement | null;
+
+          console.log(input?.value);
+
+          const body = { text: input?.value,
+                        user: utils.getAddress(racuni[0])
+        
+                      };
+
+          this.http.post<any>('http://localhost:8080/review/' + id, body).subscribe({
+            next: data => {
+                console.log(data)
+                //window.location.href = '/articles';
+
+                this.reviewSubmittedSuccess = true
+                this.reviewSubmittedFail = false
+            
+            },
+            error: error => {
+              this.reviewSubmittedSuccess = false
+              this.reviewSubmittedFail = true
+                console.error('There was an error!', error);
+            }
+        })
+
+      }
+    }
+
   }
 
   reset(){
