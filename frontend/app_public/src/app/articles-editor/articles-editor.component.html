@@ -1,6 +1,6 @@
 <nav>
   <div class="nav nav-tabs mt-5" id="nav-tab" role="tablist">
-    <a class="nav-item nav-link active" id="nav-all-articles-tab" data-toggle="tab" href="#nav-all-articles"
+   <!-- <a class="nav-item nav-link active" id="nav-all-articles-tab" data-toggle="tab" href="#nav-all-articles"
        role="tab" aria-controls="nav-all-articles" aria-selected="true">My articles <span
       class="badge badge-light">3</span></a>
     <a class="nav-item nav-link" id="nav-approved-articles-tab" data-toggle="tab" href="#nav-approved-articles"
@@ -8,13 +8,14 @@
       class="badge badge-light">1</span></a>
     <a class="nav-item nav-link" id="nav-rejected-articles-tab" data-toggle="tab" href="#nav-rejected-articles"
        role="tab" aria-controls="nav-rejected-articles" aria-selected="false">Rejected articles<span
-      class="badge badge-light">1</span></a>
-    <a class="nav-item nav-link" id="nav-articles-under-review-tab" data-toggle="tab"
+      class="badge badge-light">1</span></a> -->
+    <a class="nav-item nav-link active" id="nav-articles-under-review-tab" data-toggle="tab"
        href="#nav-articles-under-review" role="tab" aria-controls="nav-articles-under-review"
-       aria-selected="false">Articles under review<span class="badge badge-light">1</span></a>
+       aria-selected="true">Articles in voting<span class="badge badge-light">{{reviewedArticles.length}}</span></a>
   </div>
 </nav>
 <div class="tab-content mt-5" id="nav-tabContent">
+  <!--
   <div class="tab-pane fade show active" id="nav-all-articles" role="tabpanel" aria-labelledby="nav-all-articles-tab">
     <div class="card ml-5 mr-5 mt-3 bg-success thumbnail">
       <div (click)="onclick($event.currentTarget)">
@@ -67,7 +68,7 @@
               <button class="btn btn-danger float-left" style="height: 50px">Request revision</button>
               <button class="btn btn-success float-right" style="height: 50px">Accept article</button>
             </div>
-            <!--<h4 class="card-subtitle mb-4 text-muted">7.6.2022</h4>-->
+            
           </div>
           <div class="clearfix"></div>
         </div>
@@ -124,7 +125,7 @@
               <button class="btn btn-danger float-left" style="height: 50px">Request revision</button>
               <button class="btn btn-success float-right" style="height: 50px">Accept article</button>
             </div>
-            <!--<h4 class="card-subtitle mb-4 text-muted">7.6.2022</h4>-->
+            
           </div>
           <div class="clearfix"></div>
         </div>
@@ -181,7 +182,7 @@
               <button class="btn btn-danger float-left" style="height: 50px">Request revision</button>
               <button class="btn btn-success float-right" style="height: 50px">Accept article</button>
             </div>
-            <!--<h4 class="card-subtitle mb-4 text-muted">7.6.2022</h4>-->
+            
           </div>
           <div class="clearfix"></div>
         </div>
@@ -242,7 +243,7 @@
                 <button class="btn btn-danger float-left" style="height: 50px">Request revision</button>
                 <button class="btn btn-success float-right" style="height: 50px">Accept article</button>
               </div>
-              <!--<h4 class="card-subtitle mb-4 text-muted">7.6.2022</h4>-->
+            
             </div>
             <div class="clearfix"></div>
           </div>
@@ -304,17 +305,17 @@
                 <button class="btn btn-danger float-left" style="height: 50px">Request revision</button>
                 <button class="btn btn-success float-right" style="height: 50px">Accept article</button>
               </div>
-              <!--<h4 class="card-subtitle mb-4 text-muted">7.6.2022</h4>-->
+              <h4 class="card-subtitle mb-4 text-muted">7.6.2022</h4>
             </div>
             <div class="clearfix"></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="tab-pane fade" id="nav-articles-under-review" role="tabpanel"
+  </div> -->
+  <div class="tab-pane fade show active" id="nav-articles-under-review" role="tabpanel"
        aria-labelledby="nav-articles-under-review-tab">
-    <div class="card ml-5 mr-5 mt-3 bg-warning thumbnail">
+    <div  *ngFor="let article of reviewedArticles" class="card ml-5 mr-5 mt-3 bg-warning thumbnail">
       <div (click)="onclick($event.currentTarget)">
         <a>
           <div class="card-header">
@@ -322,14 +323,14 @@
               <h4>Article title</h4>
             </div>
             <div class="float-right">
-              <p class="text-right">Article under review</p>
+              <p class="text-right">{{article.title}}</p>
             </div>
             <div class="clearfix"></div>
           </div>
         </a>
         <div class="card-body bg-light">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+          <h5 class="card-title">BY: {{article.user}}</h5>
+          
           <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
         </div>
       </div>
@@ -337,33 +338,23 @@
         <div class="card-body bg-light" style="display:inline-flex">
           <div class="float-left"  style="display: inline-block">
             <img src="../../assets/43716.jpg" style="width: 200px; margin-bottom: 5px">
+            <br>
             <button class="btn btn-primary" style="height: 50px; margin: 10px 10px 0px 10px">Download article</button>
           </div>
           <div class="float-left" style="margin-left: 30px">
-            <h5 class="card-text" >Author: <small>John Doe</small></h5>
-            <h5 class="card-text">Reviewer: <small>Jane Doe</small></h5>
+            <h5 class="card-text" >Author: <small>{{article.user}}</small></h5>
+            
             <br>
-            <div>
-              <h5 class="card-text" style="margin-left: 50px">Author comments:</h5>
-              <div>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ad quod veniam
-                adipisci ex! Ab repellat, modi cupiditate soluta ea quia tempora corporis in, praesentium
-                molestias laborum, distinctio nemo sunt! Ullam quisquam mollitia aut explicabo temporibus, fuga
-                harum, soluta vel culpa, accusantium ipsum at nam deserunt voluptatibus? Dolorum, fugiat
-                officia!
-              </div>
-              <h5 class="card-text" style="margin-left: 50px">Editor comments:</h5>
-              <div>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel ad quod veniam
-                adipisci ex! Ab repellat, modi cupiditate soluta ea quia tempora corporis in, praesentium
-                molestias laborum, distinctio nemo sunt! Ullam quisquam mollitia aut explicabo temporibus, fuga
-                harum, soluta vel culpa, accusantium ipsum at nam deserunt voluptatibus? Dolorum, fugiat
-                officia!
+            <div *ngFor="let review of article.reviews">
+              <h5 class="card-text">Reviewer: <small>{{review.user}}</small></h5>
+              <h5 class="card-text" style="margin-left: 50px">Comments:</h5>
+              <div style="margin-left: 50px">
+                {{review.text}}
               </div>
             </div>
             <div style="margin-top: 20px">
-              <button class="btn btn-danger float-left" style="height: 50px">Request revision</button>
-              <button class="btn btn-success float-right" style="height: 50px">Accept article</button>
+              <button (click)="vote(article.id,'REJECT')" class="btn btn-danger float-left" style="height: 50px">Reject</button>
+              <button (click)="vote(article.id,'ACCEPT')" class="btn btn-success float-right" style="height: 50px">Accept</button>
             </div>
             <!--<h4 class="card-subtitle mb-4 text-muted">7.6.2022</h4>-->
           </div>

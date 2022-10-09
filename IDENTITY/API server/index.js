@@ -4,7 +4,7 @@ import fs from 'fs';
 import bodyParser from "body-parser";
 
 import { cyrb53, verify_user } from "./verify_identity.js";
-import { create, read, update_authority_values, update_owner_values, delete_user, update_UserAuthority_SmartContract_onCreate,update_ArticleAuthority_SmartContract_onCreate,authorizeUser, getAllUsers } from "./deploy_identity.js";
+import { create, read, update_authority_values, update_owner_values, delete_user, update_UserAuthority_SmartContract_onCreate,update_ArticleAuthority_SmartContract_onCreate,authorizeUser, getAllUsers, vote } from "./deploy_identity.js";
 import CONFIG from './config.js';
 
 //https://buddy.works/guides/how-dockerize-node-application
@@ -167,6 +167,18 @@ app.get('/authorize/:id', async function (req, res) {
     try { 
         console.log("Authorizing user");    
         var data = await authorizeUser(req.params.id);
+        res.status(200).json(data);
+    } catch(e) {
+        console.log('Error:', e.stack);
+        res.status(500).json(e.stack);
+    }
+    return 
+});
+
+app.get('/vote/:articleId/:decision', async function (req, res) {
+    try { 
+        console.log("Voting");    
+        var data = await vote(req.params.articleId,req.params.decision);
         res.status(200).json(data);
     } catch(e) {
         console.log('Error:', e.stack);

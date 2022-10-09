@@ -143,6 +143,41 @@ export async function authorizeUser(userAdress) {
 
 }
 
+export async function vote(articleId,decision) {
+    
+    let rawdataAuthority = fs.readFileSync('./contract/ArticleAuthority/ArticlesAuthority.json');
+    let contractAuthorityJson = JSON.parse(rawdataAuthority.toString()); 
+
+    //var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider);
+    var authorityContract = new ethers.Contract(CONFIG.articlesAuthority_SmartContract, contractAuthorityJson.abi, provider);
+    
+    var articleDIDAdress = await authorityContract.getArticleSmartContractAddr(articleId);
+
+    if(articleDIDAdress != "0x0000000000000000000000000000000000000000"){
+
+        let rawdataDid = fs.readFileSync('./contract/Article.json');
+
+        console.log(articleDIDAdress);
+        let contractDIDJson = JSON.parse(rawdataDid.toString()); 
+
+        var article = new ethers.Contract(userDidAdress, contractDIDJson.abi, provider);
+
+        await article.vote(decision);
+        //console.log("User type" + userType);
+
+        //return userType;
+
+        return (await article.getVotes())
+
+    }else{
+
+        return "Article DID adress is not found";
+    }
+
+
+}
+
 export async function update_authority_values(userAdress, wallet_pk, provider_name, new_data) {
     //const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
     const provider = new ethers.providers.Web3Provider(web3.currentProvider);

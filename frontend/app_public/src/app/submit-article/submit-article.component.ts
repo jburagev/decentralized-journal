@@ -165,11 +165,13 @@ export class SubmitArticleComponent implements OnInit {
           next: data => {
               console.log(data)
               //window.location.href = '/articles';
-              this.articleSubmittedSuccess = true
+              
 
               this.upload$(data['metadataId']);
 
               this.deployArticleSmartContract(data['metadataId']);
+
+              //this.articleSubmittedSuccess = true
               
              
              
@@ -200,7 +202,7 @@ export class SubmitArticleComponent implements OnInit {
               const price = ethers.utils.formatUnits(await this.provider.getGasPrice(), 'gwei')
               const options = {gasLimit: 10000000, gasPrice: ethers.utils.parseUnits(price, 'gwei')}
               */
-             
+
               //this is for Ganache local
               const options = {gasLimit: 6721975, gasPrice: ethers.utils.parseUnits("1", 'gwei')}
 
@@ -231,6 +233,8 @@ export class SubmitArticleComponent implements OnInit {
                   //this.creatingUser = false;
                   //this.createdUserInfo = "User Smart contract adress: " + data.contract_address + " User Password: " + data.user_password;
                   console.log("Successfully updated article authority smart contract");
+
+                  this.articleSubmittedSuccess = true
                 },
                 error: error => {
                   

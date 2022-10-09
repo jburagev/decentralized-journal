@@ -8,6 +8,8 @@
 8. Article submitted successfully = change to show after authority update
 9. Prevent submitting review if already submitted for particular user
 10. When is not authority user does not update the user type and does not send error back (add error handling)
+11. User is adding to authority smart contract list "users" many times if recreated
+13. Make only authority to be able to make some changes in Article smart contract
 
 Issues:
 

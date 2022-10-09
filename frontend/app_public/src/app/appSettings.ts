@@ -1,3 +1,3 @@
 export class AppSettings {
-    public static AUTHORITY_CONTRACT='0x7eEb44032cc49C0bC1261B297F6fc7a9aa11f1FE';
+    public static AUTHORITY_CONTRACT='0xaCAE53c334954fc85b63e194C9B61A92f7629BF4';
  }
