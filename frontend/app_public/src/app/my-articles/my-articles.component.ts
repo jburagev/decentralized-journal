@@ -66,7 +66,7 @@ export class MyArticlesComponent implements OnInit {
         console.log(input?.value);
 
 
-        this.http.get<any>('http://localhost:8080/author/' + utils.getAddress(racuni[0]) + '/article').subscribe({
+        this.http.get<any>('http://localhost:8080/author/' + racuni[0] + '/article').subscribe({
           next: data => {
               console.log(data)
               this.articles = data; 
@@ -78,7 +78,7 @@ export class MyArticlesComponent implements OnInit {
           }
         });
 
-        this.http.get<any>('http://localhost:8080/author/' + utils.getAddress(racuni[0]) + '/articleSubmitted').subscribe({
+        this.http.get<any>('http://localhost:8080/author/' + racuni[0] + '/articleSubmitted').subscribe({
           next: data => {
               //console.log(data)
               this.submittedArticles = data; 
@@ -90,7 +90,7 @@ export class MyArticlesComponent implements OnInit {
           }
         });
 
-        this.http.get<any>('http://localhost:8080/author/' + utils.getAddress(racuni[0]) + '/articleRejected').subscribe({
+        this.http.get<any>('http://localhost:8080/author/' + racuni[0] + '/articleRejected').subscribe({
           next: data => {
               //console.log(data)
               this.rejectedArticles = data; 
@@ -102,7 +102,7 @@ export class MyArticlesComponent implements OnInit {
           }
         });
 
-        this.http.get<any>('http://localhost:8080/author/' + utils.getAddress(racuni[0]) + '/articleAccepted').subscribe({
+        this.http.get<any>('http://localhost:8080/author/' + racuni[0] + '/articleAccepted').subscribe({
           next: data => {
               //console.log(data)
               this.acceptedArticles = data; 

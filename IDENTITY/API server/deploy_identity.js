@@ -3,7 +3,7 @@ import { cyrb53 } from "./verify_identity.js";
 import Web3 from 'web3';
 import fs from 'fs';
 import CONFIG from './config.js';
-const web3 = new Web3(Web3.givenProvider || "http://localhost:8545");
+const web3 = new Web3(Web3.givenProvider || "HTTP://127.0.0.1:7545");
 var authority_address = CONFIG.authority;
 
 var default_user_data = {
@@ -19,11 +19,13 @@ var Journal_usertype = [ "READER", "REVIEWER", "EDITOR", "AUTHOR" ];
 // convert to string before default_user_data = JSON.stringify(default_user_data);
 //.parse for reverse
 
-
+const provider = new ethers.providers.Web3Provider(web3.currentProvider);
 
 export async function create(provider_name, wallet_pk, verifier = authority_address) {
     //https://dev.to/yosi/deploy-a-smart-contract-with-ethersjs-28no
-    const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+    //const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider);
     //const provider = ethers.providers.getDefaultProvider('rinkeby');
     var new_account = await web3.eth.accounts.create();
     console.log(new_account);
@@ -35,8 +37,13 @@ export async function create(provider_name, wallet_pk, verifier = authority_addr
     let contractJson = JSON.parse(rawdata.toString()); 
     
     const factory = new ethers.ContractFactory(contractJson.abi, contractJson.data.bytecode.object, account)
+    /* this was used for Rinkeby network via metamask
     const price = ethers.utils.formatUnits(await provider.getGasPrice(), 'gwei')
     const options = {gasLimit: 10000000, gasPrice: ethers.utils.parseUnits(price, 'gwei')}
+
+    */
+    //this is used for Ganache local
+    const options = {gasLimit: 6721975, gasPrice: ethers.utils.parseUnits("1", 'gwei')}
     
     const user = await factory.deploy(options)
     await user.deployed()
@@ -58,7 +65,11 @@ export async function read(contract, provider_name) {
     let rawdata = fs.readFileSync('./contract/JournalDID.json');
     let contractJson = JSON.parse(rawdata.toString()); 
     //var user = await getContractAt("JournalDID", String(contract));
-    var user = new ethers.Contract(contract, contractJson.abi, new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key));
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider);
+    
+    //var user = new ethers.Contract(contract, contractJson.abi, new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key));
+    var user = new ethers.Contract(contract, contractJson.abi, provider);
+    
     var owner = await user.getOwner();
     var hash = await user.getHash();
     var type = await user.getType();
@@ -72,7 +83,9 @@ export async function getAllUsers() {
     let rawdataAuthority = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
     let contractAuthorityJson = JSON.parse(rawdataAuthority.toString()); 
 
-    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+    
+
+    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, provider);
 
     var users = [];
 
@@ -89,12 +102,12 @@ export async function getAllUsers() {
 
         let rawdata = fs.readFileSync('./contract/JournalDID.json');
         let contractJson = JSON.parse(rawdata.toString()); 
-        var user = new ethers.Contract(userDidAdress, contractJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+        var user = new ethers.Contract(userDidAdress, contractJson.abi, provider);
 
         var userType = await user.getType();
 
     
-        users.push({"userAddres": userAdress, "userType":userType});
+        users.push({"userAddres": userAdress.toLowerCase(), "userType":userType});
       }
     
     return users
@@ -104,8 +117,10 @@ export async function authorizeUser(userAdress) {
     let rawdataAuthority = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
     let contractAuthorityJson = JSON.parse(rawdataAuthority.toString()); 
 
-    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
-
+    //var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider);
+    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, provider);
+    
     var userDidAdress = await authorityContract.getUserSmartContractAddr(userAdress);
 
     if(userDidAdress != "0x0000000000000000000000000000000000000000"){
@@ -113,7 +128,7 @@ export async function authorizeUser(userAdress) {
         let rawdataDid = fs.readFileSync('./contract/JournalDID.json');
         let contractDIDJson = JSON.parse(rawdataDid.toString()); 
 
-        var user = new ethers.Contract(userDidAdress, contractDIDJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+        var user = new ethers.Contract(userDidAdress, contractDIDJson.abi, provider);
 
         var userType = await user.getType();
         console.log("User type" + userType);
@@ -129,7 +144,8 @@ export async function authorizeUser(userAdress) {
 }
 
 export async function update_authority_values(userAdress, wallet_pk, provider_name, new_data) {
-    const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+    //const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider);
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);
     let rawdata = fs.readFileSync('./contract/JournalDID.json');
@@ -138,7 +154,7 @@ export async function update_authority_values(userAdress, wallet_pk, provider_na
     let rawdataAuthority = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
     let contractAuthorityJson = JSON.parse(rawdataAuthority.toString()); 
 
-    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key));
+    var authorityContract = new ethers.Contract(CONFIG.authority_SmartContract, contractAuthorityJson.abi, provider);
 
     var userDidAdress = await authorityContract.getUserSmartContractAddr(userAdress); 
 
@@ -165,15 +181,21 @@ export async function update_authority_values(userAdress, wallet_pk, provider_na
             console.log("updating user data");
             await user.setUserData(JSON.stringify(new_data.user_data));
         }
+
+        return true;
     } catch (e) {
         console.log(e.message)
         return false;
     }
-    return true;
+    
 }
 
 export async function update_UserAuthority_SmartContract_onCreate(contract, wallet_pk, provider_name, userAddr) {
-    const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+
+    //const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider);
+
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);
     let rawdata = fs.readFileSync('./contract/UserAuthority/UserAuthority.json');
@@ -206,7 +228,7 @@ export async function update_UserAuthority_SmartContract_onCreate(contract, wall
 
 
 export async function update_ArticleAuthority_SmartContract_onCreate(articleId,contract) {
-    const provider = new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key);
+    //const provider = new ethers.providers.InfuraProvider(CONFIG.default_provider, CONFIG.api_key);
     const wallet = new ethers.Wallet(CONFIG.wallet_pk, provider);
     const account = wallet.connect(provider);
     let rawdata = fs.readFileSync('./contract/ArticleAuthority/ArticlesAuthority.json');
@@ -240,7 +262,7 @@ export async function update_ArticleAuthority_SmartContract_onCreate(articleId,c
 }
 
 export async function update_owner_values(contract, wallet_pk, provider_name, new_data) {
-    const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+    //const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);
     let rawdata = fs.readFileSync('./contract/JournalDID.json');
@@ -261,7 +283,7 @@ export async function update_owner_values(contract, wallet_pk, provider_name, ne
 }
 
 export async function delete_user(contract, wallet_pk, provider_name) {
-    const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+    //const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);
     let rawdata = fs.readFileSync('./contract/JournalDID.json');

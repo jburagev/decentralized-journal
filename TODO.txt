@@ -7,6 +7,7 @@
 7. Need to automate authtoritySMadress in Article.sol now it is hard coded
 8. Article submitted successfully = change to show after authority update
 9. Prevent submitting review if already submitted for particular user
+10. When is not authority user does not update the user type and does not send error back (add error handling)
 
 Issues:
 

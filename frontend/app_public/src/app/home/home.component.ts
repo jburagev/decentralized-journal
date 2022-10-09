@@ -105,8 +105,15 @@ export class HomeComponent implements OnInit {
 
     const factory = new ContractFactory(JournalDIDAbi.abi, JournalDIDAbi.data.bytecode.object, signer);
 
+    /* this was used for Rinkeby network via metamask
     const price = ethers.utils.formatUnits(await this.provider.getGasPrice(), 'gwei')
+    
     const options = {gasLimit: 10000000, gasPrice: ethers.utils.parseUnits(price, 'gwei')}
+
+    */
+
+    //this is for Ganache local
+    const options = {gasLimit: 6721975, gasPrice: ethers.utils.parseUnits("1", 'gwei')}
 
     const contract = await factory.deploy(options);
 

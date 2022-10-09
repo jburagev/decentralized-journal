@@ -238,7 +238,7 @@ export class ReviewArticleComponent implements OnInit {
 
   }
 
-  submitReview = async (id: String): Promise<any> => {
+  submitReview = async (id: string): Promise<any> => {
 
     this.reviewSubmittedSuccess = false;
 
@@ -262,17 +262,22 @@ export class ReviewArticleComponent implements OnInit {
           console.log(input?.value);
 
           const body = { text: input?.value,
-                        user: utils.getAddress(racuni[0])
+                        user: racuni[0]
         
                       };
 
-          this.http.post<any>('http://localhost:8080/review/' + id, body).subscribe({
+         await this.http.post<any>('http://localhost:8080/review/' + id, body).subscribe({
             next: data => {
                 console.log(data)
                 //window.location.href = '/articles';
 
                 this.reviewSubmittedSuccess = true
                 this.reviewSubmittedFail = false
+
+                document.getElementById(id)?.remove();
+
+                this.listArticlesUnderReview();
+                this.listArticlesSubmitted();
             
             },
             error: error => {
@@ -281,6 +286,7 @@ export class ReviewArticleComponent implements OnInit {
                 console.error('There was an error!', error);
             }
         })
+        
 
       }
     }
@@ -323,13 +329,13 @@ export class ReviewArticleComponent implements OnInit {
 
         this.http.get<any>('http://localhost:8080/metadata').subscribe({
           next: data => {
-             // console.log(data)
+              console.log(data)
               
               var filteredArray = data.filter(function (article:any) {
 
                 if(article.reviews){
                     return article.reviews.some(function (dptAccess:any) {
-                      return dptAccess.user === utils.getAddress(racuni[0])
+                      return dptAccess.user === racuni[0]
                   });
                 }
             });
@@ -371,8 +377,26 @@ export class ReviewArticleComponent implements OnInit {
         this.http.get<any>('http://localhost:8080/metadata/filterByStatus/SUBMITTED').subscribe({
           next: data => {
               console.log(data)
+
+              var filteredArray = data.filter(function (article:any) {
+
+                if(article.reviews){
+
+                  
+                      if(article.reviews.length < 3){
+                        return article.reviews.some(function (dptAccess:any) {
+                          return dptAccess.user != racuni[0]
+                        });
+                      }else{
+                        return false
+                      }
+                  
+                }else{
+                  return true;
+                }
+            });
             
-              this.submittedArticles = data;
+              this.submittedArticles = filteredArray;
 
           },
           error: error => {

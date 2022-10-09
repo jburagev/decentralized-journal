@@ -16,7 +16,9 @@ export function cyrb53(str, seed = 0) {
 
 
 export async function verify_user(contract, wallet_pk, provider_name, password) {
-    const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+    
+    //const provider = new ethers.providers.InfuraProvider(provider_name, CONFIG.api_key);
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider);
     const wallet = new ethers.Wallet(wallet_pk, provider);
     const account = wallet.connect(provider);
     let rawdata = fs.readFileSync('./contract/JournalDID.json');
