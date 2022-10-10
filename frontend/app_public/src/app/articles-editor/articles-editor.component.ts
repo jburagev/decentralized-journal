@@ -79,7 +79,7 @@ export class ArticlesEditorComponent implements OnInit {
 
         var article = new ethers.Contract(articleDIDAdress, ArticleAbi.abi, signer);
 
-        //await article.vote(decision,options);
+        await article.vote(decision);
         //console.log("User type" + userType);
 
         //return userType;
