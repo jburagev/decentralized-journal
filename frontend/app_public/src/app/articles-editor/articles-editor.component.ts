@@ -164,6 +164,10 @@ export class ArticlesEditorComponent implements OnInit {
             this.http.post<any>('http://localhost:8080/admin/decision/' + articleId + '?decision=accepted', { headers }).subscribe({
               next: data => {
                 console.log(data); 
+
+                this.listArticlesReviewed();
+                this.listArticlesAccepted();
+                this.listArticlesRejected();
              
               },
               error: error => {
@@ -173,7 +177,7 @@ export class ArticlesEditorComponent implements OnInit {
                 
             });
 
-            this.listArticlesReviewed();
+
 
           }
 
@@ -184,6 +188,10 @@ export class ArticlesEditorComponent implements OnInit {
             this.http.post<any>('http://localhost:8080/admin/decision/' + articleId + '?decision=rejected', { headers }).subscribe({
               next: data => {
                 console.log(data); 
+
+                this.listArticlesReviewed();
+                this.listArticlesAccepted();
+                this.listArticlesRejected();
             
               },
               error: error => {
@@ -193,7 +201,7 @@ export class ArticlesEditorComponent implements OnInit {
                 
             });
 
-            this.listArticlesReviewed();
+
 
           }
 

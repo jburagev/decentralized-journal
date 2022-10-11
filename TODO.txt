@@ -12,6 +12,7 @@
 13. Make only authority to be able to make some changes in Article smart contract
 14. Set autority smart contract address to be set in constructor Article smart contract
 15. On editor view to heck the user type if not editor to give notification and not show more
+16. On click on article first page should open more details about article. Make new page
 
 Issues:
 
@@ -46,3 +47,4 @@ For presentation:
 3. We can add fees for every article submittion also for every download. Those fees can go than to the reviewers and editors on making decision (tokenomics)
 4. Uncomment the code in EditorService paper-lifecycle, line 43 for the ipfs posting and test it
 5. reputation as extension no coding
+6. Show the rejection when someone already voted on article
