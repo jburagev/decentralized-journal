@@ -10,6 +10,8 @@
 10. When is not authority user does not update the user type and does not send error back (add error handling)
 11. User is adding to authority smart contract list "users" many times if recreated
 13. Make only authority to be able to make some changes in Article smart contract
+14. Set autority smart contract address to be set in constructor Article smart contract
+15. On editor view to heck the user type if not editor to give notification and not show more
 
 Issues:
 
@@ -35,3 +37,12 @@ to 4 it will be a problem since can be equal number of rejects and accepts... ne
 Ideas:
 
 1. Use smart contracts for all data. Load the data in backend on initialization. Than load new articles and changes as they come
+
+
+For presentation:
+
+1. Explain for further development of DAO for users (accept,kick,vote)
+2. Explain the DAO how can be modified the vote duration and the required votes (this should be moved to the authority contract so the Article contract can readfrom there)
+3. We can add fees for every article submittion also for every download. Those fees can go than to the reviewers and editors on making decision (tokenomics)
+4. Uncomment the code in EditorService paper-lifecycle, line 43 for the ipfs posting and test it
+5. reputation as extension no coding

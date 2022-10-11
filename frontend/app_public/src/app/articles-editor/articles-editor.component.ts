@@ -39,6 +39,10 @@ export class ArticlesEditorComponent implements OnInit {
 
   reviewedArticles: Article[] = [];
 
+  acceptedArticles: Article[] = [];
+
+  rejectedArticles: Article[] = [];
+
   provider = new ethers.providers.Web3Provider(window.ethereum as any);
 
   constructor(private http: HttpClient) { }
@@ -46,6 +50,8 @@ export class ArticlesEditorComponent implements OnInit {
   ngOnInit(): void {
 
     this.listArticlesReviewed();
+    this.listArticlesAccepted();
+    this.listArticlesRejected();
   }
 
   onclick(el:any):void {
@@ -58,9 +64,72 @@ export class ArticlesEditorComponent implements OnInit {
       el.children[1].style.maxHeight="0px"
   }
 
+  testAsync(articleId:String):void {
+    console.log("testAsync");
+
+    const headers = { 'Content-type': 'application/json', 'Cache-Control': 'no-cache' };
+    const body = { 
+     };
+            this.http.post<any>('http://localhost:8083/admin/decision/' + articleId + '?decision=accepted', body, { headers }).subscribe({
+              next: data => {
+                console.log(data); 
+             
+              },
+              error: error => {
+                
+                  console.error('There was an error!', error);
+              }
+                
+            });
+  }
+
+  /*
+  checkArticleStatus = async (articleId: String): Promise<any> => {
+
+    if (typeof window.ethereum !== "undefined") {
+
+      const signer = this.provider.getSigner();
+
+      const authorityContract = new ethers.Contract(AppSettings.AUTHORITY_CONTRACT, ArticlesAuthorityAbi.abi, this.provider);
+    
+      const articleDIDAdress = await authorityContract.getArticleSmartContractAddr(articleId);
+
+      if(articleDIDAdress != "0x0000000000000000000000000000000000000000"){
+
+        var article = new ethers.Contract(articleDIDAdress, ArticleAbi.abi, signer);
+
+        let voteTransaction = await article.vote(decision);
+
+        voteTransaction.wait();
+
+        this.provider.waitForTransaction(voteTransaction.hash).then(async function(transaction:any) {
+          //console.log('Transaction Mined: ' + transaction.hash);
+          console.log('Voted succesfully!');
+          console.log(await article.getVotes(options))
+
+
+
+      });
+
+        //return userType;
+
+        
+
+        return ""
+
+
+      }else{
+
+        return "Article DID adress is not found";
+      }
+
+    }
+
+  }
+
+*/
   vote = async (articleId: String,decision:String): Promise<any> => {
 
-    const ethereum = window.ethereum as MetaMaskInpageProvider;
 
     if (typeof window.ethereum !== "undefined") {
 
@@ -79,14 +148,63 @@ export class ArticlesEditorComponent implements OnInit {
 
         var article = new ethers.Contract(articleDIDAdress, ArticleAbi.abi, signer);
 
-        await article.vote(decision);
-        //console.log("User type" + userType);
+        let voteTransaction = await article.vote(decision);
+
+        voteTransaction.wait();
+
+        this.provider.waitForTransaction(voteTransaction.hash).then(async (transaction:any) => {
+          //console.log('Transaction Mined: ' + transaction.hash);
+          console.log('Voted succesfully!');
+          const articleStatus = await article.status();
+
+          if(articleStatus == 2){
+
+            const headers = { 'Content-type': 'application/json', 'Cache-Control': 'no-cache' };
+            
+            this.http.post<any>('http://localhost:8080/admin/decision/' + articleId + '?decision=accepted', { headers }).subscribe({
+              next: data => {
+                console.log(data); 
+             
+              },
+              error: error => {
+                
+                  console.error('There was an error!', error);
+              }
+                
+            });
+
+            this.listArticlesReviewed();
+
+          }
+
+          if(articleStatus == 3){
+
+            const headers = { 'Content-type': 'application/json', 'Cache-Control': 'no-cache' };
+            
+            this.http.post<any>('http://localhost:8080/admin/decision/' + articleId + '?decision=rejected', { headers }).subscribe({
+              next: data => {
+                console.log(data); 
+            
+              },
+              error: error => {
+                
+                  console.error('There was an error!', error);
+              }
+                
+            });
+
+            this.listArticlesReviewed();
+
+          }
+
+
+      });
 
         //return userType;
 
-        console.log(await article.getVotes(options))
+        
 
-        return (await article.getVotes(options))
+        return ""
 
 
       }else{
@@ -140,7 +258,7 @@ export class ArticlesEditorComponent implements OnInit {
 
         console.log(utils.getAddress(racuni[0]));
 
-        this.http.get<any>('http://localhost:8080/metadata').subscribe({
+        this.http.get<any>('http://localhost:8080/metadata/filterByStatus/SUBMITTED').subscribe({
           next: data => {
               console.log(data)
               
@@ -168,6 +286,76 @@ export class ArticlesEditorComponent implements OnInit {
 
 
              
+
+          },
+          error: error => {
+            
+              console.error('There was an error!', error);
+          }
+        });
+        
+      } 
+    }
+
+
+  }
+
+  listArticlesRejected = async (): Promise<any> => {
+
+    const ethereum = window.ethereum as MetaMaskInpageProvider;
+
+    if (typeof window.ethereum !== "undefined") {
+      // Poveži se na MetaMask
+      const racuni: any = await ethereum.request({method: "eth_requestAccounts"});
+
+      if (racuni != null) {
+        //alert(racuni[0]);
+
+        const { utils } = require('ethers');
+
+        console.log(utils.getAddress(racuni[0]));
+
+        this.http.get<any>('http://localhost:8080/metadata/filterByStatus/REJECTED').subscribe({
+          next: data => {
+              console.log(data)
+              
+              this.rejectedArticles = data;
+
+
+          },
+          error: error => {
+            
+              console.error('There was an error!', error);
+          }
+        });
+        
+      } 
+    }
+
+
+  }
+
+  listArticlesAccepted = async (): Promise<any> => {
+
+    const ethereum = window.ethereum as MetaMaskInpageProvider;
+
+    if (typeof window.ethereum !== "undefined") {
+      // Poveži se na MetaMask
+      const racuni: any = await ethereum.request({method: "eth_requestAccounts"});
+
+      if (racuni != null) {
+        //alert(racuni[0]);
+
+        const { utils } = require('ethers');
+
+        console.log(utils.getAddress(racuni[0]));
+
+        this.http.get<any>('http://localhost:8080/metadata/filterByStatus/ACCEPTED').subscribe({
+          next: data => {
+              console.log(data)
+              
+              this.acceptedArticles = data;
+
 
           },
           error: error => {

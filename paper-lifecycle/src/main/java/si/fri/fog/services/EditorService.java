@@ -40,8 +40,8 @@ public class EditorService {
         String cid = null;
         if (decision.equals("accepted")) {
             finalDecision = Stage.ACCEPTED;
-            File file = fileService.getUnreleasedArticle(metadata.getSubmission());
-            cid = fileService.saveReleasedArticle(file);
+           // File file = fileService.getUnreleasedArticle(metadata.getSubmission());
+           // cid = fileService.saveReleasedArticle(file);
         } else {
             finalDecision = Stage.REJECTED;
         }

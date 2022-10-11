@@ -13,13 +13,13 @@ contract Article {
     // address of the user (could be a reviewer/editor/...)
     address public authorAddress;
 
-    address authtoritySMadress = 0x2c6398652F40970e1897B07F472684c4B431ec6f;
+    address authtoritySMadress = 0xA4b92575aDA7BAc8f71b5109508B2622c310EAB1;
 
     enum ArticleStatus { NONE, VOTING, PUBLISHED,REJECTED}
     
     string ipfsHash;
     string cloudId;
-    ArticleStatus status;
+    ArticleStatus public status;
 
     uint256 submissionTime;
     uint256 publishonTime;
@@ -50,6 +50,9 @@ contract Article {
 
     function vote(string memory decison) public{
 
+        
+
+
         require(
             getUserRole(msg.sender) == JournalDID.Journal_usertype.EDITOR,
             "You must be a editor to vote for an acceptance of an article."
@@ -65,7 +68,6 @@ contract Article {
             "Article has been voted. You cannot sumbit the voting anymore."
         );
 
-        
         
         if(keccak256(bytes(decison))  == keccak256(bytes("ACCEPT"))){
  
@@ -85,7 +87,7 @@ contract Article {
         if (votesMatrix.length == REQUIRED_VOTES) {
             makeDecision();
         }
-            
+        
 
     }
 
@@ -138,6 +140,13 @@ contract Article {
     function getVoteByAddress() public view returns (EditorDecision) {
 
         return votes[msg.sender];
+    }
+
+    function setCloudId(string memory cloudIdPar) public returns (bool){
+
+        cloudId = cloudIdPar;
+  
+        return true;
     }
 
 }
