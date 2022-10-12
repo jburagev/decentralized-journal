@@ -13,6 +13,8 @@ contract Article {
     // address of the user (could be a reviewer/editor/...)
     address public authorAddress;
 
+    address authority_address;
+
     address authtoritySMadress = 0xA4b92575aDA7BAc8f71b5109508B2622c310EAB1;
 
     enum ArticleStatus { NONE, VOTING, PUBLISHED,REJECTED}
@@ -39,10 +41,16 @@ contract Article {
     // events triggered by specific actions (article submitted, accepted/rejected)
     event ArticleSubmitted(string articleId, string articleIpfsHash);
 
+    modifier onlyAuthority(){
+        // default (unset) address type is 0x0
+        if (authority_address == address(0) || msg.sender == authority_address ) _;
+    }
 
-    constructor() {
+
+    constructor(address authority) {
         authorAddress = msg.sender;
         status = ArticleStatus.VOTING;
+        //authority_address = authority;
 
     }
 
@@ -147,6 +155,18 @@ contract Article {
         cloudId = cloudIdPar;
   
         return true;
+    }
+
+    function setIpfsHash(string memory hash) public returns (bool){
+
+        ipfsHash = hash;
+  
+        return true;
+    }
+
+    function getIpfsHash() public returns (string memory){
+  
+        return ipfsHash;
     }
 
 }
