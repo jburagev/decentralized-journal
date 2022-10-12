@@ -47,7 +47,7 @@ contract Article {
     }
 
 
-    constructor(address authority) {
+    constructor() {
         authorAddress = msg.sender;
         status = ArticleStatus.VOTING;
         //authority_address = authority;
@@ -164,7 +164,7 @@ contract Article {
         return true;
     }
 
-    function getIpfsHash() public returns (string memory){
+    function getIpfsHash() external view returns (string memory){
   
         return ipfsHash;
     }
