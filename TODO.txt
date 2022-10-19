@@ -47,8 +47,6 @@ For presentation:
 1. Explain for further development of DAO for users (accept,kick,vote)
 2. Explain the DAO how can be modified the vote duration and the required votes (this should be moved to the authority contract so the Article contract can readfrom there)
 3. We can add fees for every article submittion also for every download. Those fees can go than to the reviewers and editors on making decision (tokenomics)
-4. Uncomment the code in EditorService paper-lifecycle, line 43 for the ipfs posting and test it
-5. reputation as extension no coding
+5. reputation as extension no coding?
 6. Show the rejection when someone already voted on article
 7. identity project is not really identity but backend for more things than identity. Using for communication with blockchain (some things need to be renamed)
-8. 

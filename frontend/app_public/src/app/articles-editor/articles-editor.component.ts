@@ -168,6 +168,8 @@ export class ArticlesEditorComponent implements OnInit {
                 this.listArticlesReviewed();
                 this.listArticlesAccepted();
                 this.listArticlesRejected();
+
+                article.setIpfsHash();
              
               },
               error: error => {
